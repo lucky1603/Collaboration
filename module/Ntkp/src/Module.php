@@ -47,9 +47,7 @@ class Module implements ConfigProviderInterface {
         return [
             'factories' => [
                 UserController::class => function($container) {
-                    return new UserController(
-                        $container->get(UserTable::class)
-                    );
+                    return new UserController($container);
                 }
             ]
         ];        

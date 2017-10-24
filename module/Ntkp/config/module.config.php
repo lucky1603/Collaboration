@@ -8,9 +8,14 @@
 
 namespace Ntkp;
 
+use Ntkp\Controller\UserController;
+use Ntkp\Model\Role;
 use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Router\Http\Segment;
-use Ntkp\Controller\UserController;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+
 
 return [
     'controllers' => [
@@ -34,6 +39,17 @@ return [
                     ]
                 ]
             ]
+        ]
+    ],
+    'service_manager' => [
+        'factories' => [
+            'RoleModel' => function($sm) {
+                $dbAdapter = $sm->get(AdapterInterface::class);
+                $resultSetPrototype = new ResultSet();
+                $resultSetPrototype->setArrayObjectPrototype(new Role());
+                $tableGateway = new TableGateway('role', $dbAdapter, null, $resultSetPrototype);
+                return new Model\RoleModel($tableGateway);
+            }
         ]
     ],
     'view_manager' => [
