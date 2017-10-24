@@ -21,6 +21,7 @@ class User {
     public $username;
     public $password;
     public $description;
+    public $user_status_id;
     
     public function exchangeArray($data)
     {
@@ -31,5 +32,6 @@ class User {
         $this->username = isset($data['username']) ? $data['username'] : null;
         $this->password = isset($data['password']) ? $data['password'] : null;
         $this->description = isset($data['description']) ? $data['description'] : null;        
+        $this->user_status_id = isset($data['user_status_id']) ? $data['user_status_id'] : null;
     }
 }

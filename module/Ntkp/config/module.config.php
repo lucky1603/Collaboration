@@ -10,7 +10,9 @@ namespace Ntkp;
 
 use Ntkp\Controller\UserController;
 use Ntkp\Model\Role;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Ntkp\Model\RoleModel;
+use Ntkp\Model\UserStatus;
+use Ntkp\Model\UserStatusModel;
 use Zend\Router\Http\Segment;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -48,7 +50,14 @@ return [
                 $resultSetPrototype = new ResultSet();
                 $resultSetPrototype->setArrayObjectPrototype(new Role());
                 $tableGateway = new TableGateway('role', $dbAdapter, null, $resultSetPrototype);
-                return new Model\RoleModel($tableGateway);
+                return new RoleModel($tableGateway);
+            },
+            'UserStatusModel' => function($sm) {
+                $dbAdapter = $sm->get(AdapterInterface::class);
+                $resultSetPrototype = new ResultSet();
+                $resultSetPrototype->setArrayObjectPrototype(new UserStatus());
+                $tableGateway = new TableGateway('user_status', $dbAdapter, null, $resultSetPrototype);
+                return new UserStatusModel($tableGateway);
             }
         ]
     ],

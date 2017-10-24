@@ -53,7 +53,8 @@ class UserTable {
             'role_id' => $user->role_id,
             'username' => $user->username,
             'password' => $user->password,
-            'description' => $user->description,            
+            'description' => $user->description,     
+            'user_status_id' => $user->user_status_id,
         ];
         
         $id = (int) $user->id;

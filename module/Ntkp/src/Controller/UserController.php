@@ -34,6 +34,8 @@ class UserController extends AbstractActionController {
             $id = $user->role_id;
             $roleName = $this->serviceManager->get('RoleModel')->getRole($id);
             $user->role_id = $roleName;
+            $statusValue = $this->serviceManager->get('UserStatusModel')->getUserStatusValue($user->user_status_id);
+            $user->user_status_id = $statusValue;
             
             $userData[] = $user;
         }
