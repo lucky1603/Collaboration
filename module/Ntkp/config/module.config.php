@@ -27,7 +27,7 @@ return [
     ],
     'router' => [
         'routes' => [
-            'ntkp' => [
+            'user' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/user[/:action[/:id]]',

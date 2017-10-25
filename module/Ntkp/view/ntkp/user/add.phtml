@@ -1,0 +1,92 @@
+<?php
+// module/Ntkp/view/ntkp/user/add.phtml
+    $title = "Dodaj novog korisnika";
+    $this->headTitle($title);
+?>
+
+<h1><?= $this->escapehtml($title) ?></h1>
+
+<?php 
+    $name = $form->get('name');
+    $name->setAttribute('class', 'form-control');
+    $name->setAttribute('placeholder', 'Ime korisnika ...');
+    
+    $email = $form->get('email');
+    $email->setAttribute('class', 'form-control');
+    $email->setAttribute('placeholder', 'E-mail ...');
+    
+    $username = $form->get('username');
+    $username->setAttribute('class', 'form-control');
+    $username->setAttribute('placeholder', 'Korisnicko ime ...');
+    
+    $password = $form->get('password');
+    $password->setAttribute('class', 'form-control');
+    
+    $description = $form->get('description');
+    $description->setAttribute('class', 'form-control');
+    $description->setAttribute('placeholder', 'Kratak opis ...');
+    
+    $roleId = $form->get('role_id');
+    $roleId->setAttribute('class', 'form-control');
+    
+    $userStatusId = $form->get('user_status_id');
+    $userStatusId->setAttribute('class', 'form-control');
+    
+    $submit = $form->get('submit');
+    $submit->setAttribute('class', 'btn btn-primary');
+    
+
+    $form->setAttribute('action', $this->url('user', ['action' => 'add']));
+    $form->prepare();
+        
+    echo $this->form()->openTag($form);    
+?>
+
+<div class="form-group">
+	<?= $this->formLabel($name) ?>
+	<?= $this->formElement($name) ?>
+	<?= $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+	<?= $this->formLabel($email) ?>
+	<?= $this->formElement($email) ?>
+	<?= $this->formElementErrors()->render($email, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+	<?= $this->formLabel($username) ?>
+	<?= $this->formElement($username) ?>
+	<?= $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+	<?= $this->formLabel($password) ?>
+	<?= $this->formElement($password) ?>
+	<?= $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+	<?= $this->formLabel($description) ?>
+	<?= $this->formElement($description) ?>
+	<?= $this->formElementErrors()->render($description, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+	<?= $this->formLabel($roleId) ?>
+	<?= $this->formElement($roleId) ?>
+	<?= $this->formElementErrors()->render($roleId, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+	<?= $this->formLabel($userStatusId) ?>
+	<?= $this->formElement($userStatusId) ?>
+	<?= $this->formElementErrors()->render($userStatusId, ['class' => 'help-block']) ?>
+</div>
+
+
+<?php 
+    echo $this->formSubmit($submit);
+    echo $this->formHidden($form->get('id'));
+    echo $this->form()->closeTag();    
+?>

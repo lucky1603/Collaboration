@@ -26,4 +26,9 @@ class RoleModel {
         $row = $rowset->current();
         return $row->name;
     }
+    
+    public function fetchAll()
+    {
+        return $this->tableGateway->select();
+    }
 }

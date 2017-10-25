@@ -11,6 +11,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Ntkp\Model\UserTable;
 use Ntkp\Model\User;
 use Ntkp\Controller\UserController;
+use Ntkp\Form\UserForm;
 
 
 /**
@@ -37,6 +38,9 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayobjectPrototype(new User());
                     return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
+                },
+                UserForm::class => function($sm) {
+                    return new UserForm('user', [ 'service_manager' => $sm]);
                 }
             ]
         ];
