@@ -1,0 +1,41 @@
+<?php
+
+?>
+<h1>UČESNICI</h1>
+<?php if($members->count() == 0): ?>
+	<p>Nažalost, tabela članova je prazna.</p>
+<?php else: ?>
+	<table class="table">
+    <thead>
+        <tr>
+            <th>R.br.</th>
+            <th>Ime</th>
+            <th>Vrsta učesnika</th>
+            <th>Uloga</th>
+            <th>Tip svojine</th>       
+            <th>Web strana</th>     
+            <th>Status</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        <?php foreach($members as $member): ?>
+        <tr>
+            <td><?= $member['id'] ?></td>
+            <td><?= $member['name'] ?></td>
+            <td><?= $member['member_type'] ?></td>
+            <td><?= $member['member_role'] ?></td>
+            <td><?= $member['property'] ?></td>
+            <td><?= $member['url'] ?></td>
+            <td><?= $member['member_status'] ?></td>
+            <td><a href="<?php echo $this->url('member', ['action' => 'edit', 'id' => $member['id']]) ?>">Promeni</a> |
+            <a href="<?php echo $this->url('member', ['action' => 'delete', 'id' => $member['id']]) ?>">Obriši</a></td>
+            <td></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<a class="btn btn-primary" href="<?php echo $this->url('member', ['action' => 'add'])?>">Dodaj novog učesnika</a>
+<?php endif;?>
+

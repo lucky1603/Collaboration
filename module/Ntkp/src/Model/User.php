@@ -48,11 +48,12 @@ class User implements InputFilterAwareInterface {
         $this->username = isset($data['username']) ? $data['username'] : null;
         $this->description = isset($data['description']) ? $data['description'] : null;
         $this->user_status_id = isset($data['user_status_id']) ? $data['user_status_id'] : null;
-        
+                
         if(isset($data['password']))
         {
             $this->setPassword($data['password']);
-        }               
+        }     
+                  
     }
     
     public function getArrayCopy()

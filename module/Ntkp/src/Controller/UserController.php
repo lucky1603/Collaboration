@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Ntkp\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -80,6 +74,7 @@ class UserController extends AbstractActionController {
             return ['form' => $form];
         }
         
+        
         $user->exchangeArray($form->getData());
         $userTable = $this->serviceManager->get(UserTable::class);
         $userTable->saveUser($user);
@@ -95,6 +90,7 @@ class UserController extends AbstractActionController {
     {
         $table = $this->serviceManager->get(UserTable::class);
         $id = (int) $this->params()->fromRoute('id', 0);
+        
         if(0 == $id) 
         {
             return $this->redirect()->toRoute('user', ['action' => 'add']);
@@ -125,6 +121,7 @@ class UserController extends AbstractActionController {
         if(! $form->isValid()) {
             return $viewModel;
         }
+        
         
         $table->saveUser($user);
         

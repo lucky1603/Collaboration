@@ -12,6 +12,11 @@ use Ntkp\Model\UserTable;
 use Ntkp\Model\User;
 use Ntkp\Controller\UserController;
 use Ntkp\Form\UserForm;
+use Ntkp\Model\Member;
+use Ntkp\Model\MemberTable;
+use Ntkp\Controller\MemberController;
+use Ntkp\Model\MemberView;
+use Ntkp\Form\MemberForm;
 
 
 /**
@@ -29,19 +34,40 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
+                /* Tables */
                 UserTable::class => function($container) {
-                    $tableGateway = $container->get(Model\AlbumTableGateway::class);
+                    $tableGateway = $container->get(Model\UserTableGateway::class);
                     return new UserTable($tableGateway);
+                },   
+                MemberTable::class => function($container) {
+                    $tableGateway = $container->get(Model\MemberTableGateway::class);
+                    return new MemberTable($tableGateway);
                 },
-                Model\AlbumTableGateway::class => function($sm) {
+                MemberView::class => function($container) {
+                    $dbAdapter = $container->get(\Zend\Db\Adapter\Adapter::class);
+                    $memberView = new MemberView($dbAdapter);
+                    return $memberView;
+                },
+                /* Gateways */
+                Model\UserTableGateway::class => function($sm) {
                     $dbAdapter = $sm->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayobjectPrototype(new User());
                     return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
+                },                
+                Model\MemberTableGateway::class => function($sm) {
+                    $dbAdapter = $sm->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Member());
+                    return new TableGateway('member', $dbAdapter, null, $resultSetPrototype);
                 },
+                /* Forms */
                 UserForm::class => function($sm) {
-                    return new UserForm('user', [ 'service_manager' => $sm]);
-                }
+                    return new UserForm('UserForm', [ 'service_manager' => $sm]);
+                },
+                MemberForm::class => function($sm) {
+                    return new MemberForm('MemberFor', ['service_manager' => $sm]);
+                },                
             ]
         ];
     }
@@ -52,8 +78,11 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 UserController::class => function($container) {
                     return new UserController($container);
+                },
+                MemberController::class => function($container) {
+                    return new MemberController($container);
                 }
-            ]
+            ],
         ];        
     }
 

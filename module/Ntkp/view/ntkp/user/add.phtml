@@ -1,6 +1,10 @@
 <?php
 // module/Ntkp/view/ntkp/user/add.phtml
     $title = "Dodaj novog korisnika";
+    if(isset($id))
+    {
+        $title = "Promeni korisničke podatke";
+    }
     $this->headTitle($title);
 ?>
 
@@ -36,57 +40,76 @@
     $submit->setAttribute('class', 'btn btn-primary');
     
 
-    $form->setAttribute('action', $this->url('user', ['action' => 'add']));
+    if(isset($id))
+    {
+        $form->setAttribute('action', $this->url('user', ['action' => 'edit', 'id' => $id]));
+    } else {
+        $form->setAttribute('action', $this->url('user', ['action' => 'add']));
+    }
+    
     $form->prepare();
         
     echo $this->form()->openTag($form);    
-?>
-
-<div class="form-group">
-	<?= $this->formLabel($name) ?>
-	<?= $this->formElement($name) ?>
-	<?= $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
-</div>
-
-<div class="form-group">
-	<?= $this->formLabel($email) ?>
-	<?= $this->formElement($email) ?>
-	<?= $this->formElementErrors()->render($email, ['class' => 'help-block']) ?>
-</div>
-
-<div class="form-group">
-	<?= $this->formLabel($username) ?>
-	<?= $this->formElement($username) ?>
-	<?= $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
-</div>
-
-<div class="form-group">
-	<?= $this->formLabel($password) ?>
-	<?= $this->formElement($password) ?>
-	<?= $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
-</div>
-
-<div class="form-group">
-	<?= $this->formLabel($description) ?>
-	<?= $this->formElement($description) ?>
-	<?= $this->formElementErrors()->render($description, ['class' => 'help-block']) ?>
-</div>
-
-<div class="form-group">
-	<?= $this->formLabel($roleId) ?>
-	<?= $this->formElement($roleId) ?>
-	<?= $this->formElementErrors()->render($roleId, ['class' => 'help-block']) ?>
-</div>
-
-<div class="form-group">
-	<?= $this->formLabel($userStatusId) ?>
-	<?= $this->formElement($userStatusId) ?>
-	<?= $this->formElementErrors()->render($userStatusId, ['class' => 'help-block']) ?>
-</div>
-
-
-<?php 
-    echo $this->formSubmit($submit);
     echo $this->formHidden($form->get('id'));
-    echo $this->form()->closeTag();    
 ?>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($name) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($name);?>
+        <?php echo $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($username) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($username);?>
+        <?php echo $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($email) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($email);?>
+        <?php echo $this->formElementErrors()->render($email, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($password) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($password);?>
+        <?php echo $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($description) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($description);?>
+        <?php echo $this->formElementErrors()->render($description, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($roleId) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($roleId);?>
+        <?php echo $this->formElementErrors()->render($roleId, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($userStatusId) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($userStatusId);?>
+        <?php echo $this->formElementErrors()->render($userStatusId, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<?php echo $this->formSubmit($submit) ?>
+<a href="<?php echo $this->url('user')?>" class="btn btn-default" style="margin-left: 20px">Nazad</a>
+<?php echo $this->form()->closeTag() ?>
+    

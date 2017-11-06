@@ -17,8 +17,13 @@ use Zend\Form\Element;
  * @author Sinisa Ristic
  */
 class UserForm extends Form {
+    /**
+     * Constructor
+     * @param unknown $name
+     * @param array $options
+     */
     public function __construct($name = null, $options=array()) {
-        parent::__construct('user');
+        parent::__construct('UserForm');
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
         $this->setAttribute('class', 'form-horizontal');
@@ -36,25 +41,41 @@ class UserForm extends Form {
         $this->add([
             'name' => 'name',
             'type' => 'text',
+            'required' => 'required',
+            'class' => 'form-control',
             'options' => [
-                'label' => 'Ime'
+                'label' => 'Ime',
+                'label_attributes' => [
+                    'class' => 'control-label col-xs-2',
+                ]
             ],
         ]);
         
         $this->add([
             'name' => 'username',
             'type' => 'text', 
+            'required' => 'required',
+            'class' => 'form-control',
             'options' => [
-                'label' => "Korisnicko ime"
+                'label' => "Korisnicko ime", 
+                'label_attributes' => [
+                    'class' => 'control-label col-xs-2',
+                ]
             ],
         ]);
                 
         $password = new Element\Password("password");
         $password->setLabel("Lozinka");
+        $password->setLabelAttributes([
+            'class' => 'control-label col-xs-2', 
+        ]);
         $this->add($password);
         
         $email = new Element\Email('email');
         $email->setLabel('e-mail');
+        $email->setLabelAttributes([
+            'class' => 'control-label col-xs-2',
+        ]);
         $this->add($email);
         
         // User-role select element.         
@@ -71,6 +92,9 @@ class UserForm extends Form {
             'options' => [
                 'label' => 'Korisnicka rola?',
                 'value_options' => $options,
+                'label_attributes' => [
+                    'class' => 'control-label col-xs-2',
+                ]
             ],
         ]);
         
@@ -88,6 +112,9 @@ class UserForm extends Form {
             'options' => [
                 'label' => 'Status korisnika?',
                 'value_options' => $options,
+                'label_attributes' => [
+                    'class' => 'control-label col-xs-2',
+                ]
             ],
         ]);
         
@@ -116,6 +143,7 @@ class UserForm extends Form {
                 'class' => 'form-control',
             ],
         ]);
+       
         
     }
 }
