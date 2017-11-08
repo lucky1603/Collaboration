@@ -39,19 +39,19 @@ class User implements InputFilterAwareInterface {
         $this->password = md5($clearPassword);
     }
     
-    public function exchangeArray($data)
+    public function exchangeArray($user)
     {
-        $this->id = isset($data['id']) ? $data['id'] : null;
-        $this->name = isset($data['name']) ? $data['name'] : null;
-        $this->email = isset($data['email']) ? $data['email'] : null;
-        $this->role_id = isset($data['role_id']) ? $data['role_id'] : null;
-        $this->username = isset($data['username']) ? $data['username'] : null;
-        $this->description = isset($data['description']) ? $data['description'] : null;
-        $this->user_status_id = isset($data['user_status_id']) ? $data['user_status_id'] : null;
+        $this->id = isset($user['id']) ? $user['id'] : null;
+        $this->name = isset($user['name']) ? $user['name'] : null;
+        $this->email = isset($user['email']) ? $user['email'] : null;
+        $this->role_id = isset($user['role_id']) ? $user['role_id'] : null;
+        $this->username = isset($user['username']) ? $user['username'] : null;
+        $this->description = isset($user['description']) ? $user['description'] : null;
+        $this->user_status_id = isset($user['user_status_id']) ? $user['user_status_id'] : null;
                 
-        if(isset($data['password']))
+        if(isset($user['password']))
         {
-            $this->setPassword($data['password']);
+            $this->setPassword($user['password']);
         }     
                   
     }

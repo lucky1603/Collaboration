@@ -8,6 +8,9 @@ use Ntkp\Model\UserTable;
 use Zend\ServiceManager\ServiceManager;
 use Ntkp\Form\UserForm;
 use Ntkp\Model\User;
+use Zend\Session\Container;
+use Ntkp\Model\MemberModel;
+use Zend\Escaper\Escaper;
 
 /**
  * Description of UserController
@@ -77,9 +80,46 @@ class UserController extends AbstractActionController {
         
         $user->exchangeArray($form->getData());
         $userTable = $this->serviceManager->get(UserTable::class);
-        $userTable->saveUser($user);
+        $ret = $userTable->saveUser($user);
         
         return $this->redirect()->toRoute('user', ['action' => 'index']);
+    }
+    
+    public function addUserMemberAction()
+    {
+        // Create form.
+        $form = $this->serviceManager->get(UserForm::class);
+        $form->get('submit')->setValue('Dodaj korisnika');
+        
+        // Initialize member model.
+        $session = new Container('models');
+        $memberModel = $this->serviceManager->get(MemberModel::class);
+        $memberModel->exchangeArray($session->memberModelData);
+                       
+        $request = $this->getRequest();        
+        if(! $request->isPost()) {
+            return ['form' => $form, 'model' => $memberModel];
+        }
+        
+        $user = new User();
+        $form->bind($user);
+        $form->setInputFilter($user->getInputFilter());
+        $form->setData($request->getPost());
+        
+        if(! $form->isValid())
+        {
+            return ['form' => $form, 'model' => $memberModel];
+        }
+        
+        $memberModel->users[] = $user;
+        $session->memberModelData = $memberModel->getArrayCopy();
+        
+        if(! isset($memberModel->member->id) || $memberModel->member->id == 0)
+        {
+            return $this->redirect()->toRoute('member', ['action' => 'addWithModel']);
+        }
+        
+        return $this->redirect()->toUrl('/member/editWithModel/'.$memberModel->member->id.'#tab2');
     }
     
     /**
@@ -128,6 +168,51 @@ class UserController extends AbstractActionController {
         return $this->redirect()->toRoute('user', ['action' => 'index']);
     }
     
+    public function editUserMemberAction(){
+        // Create form.
+        $form = $this->serviceManager->get(UserForm::class);
+        $form->get('submit')->setValue('Promeni korisnika');
+        
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if(0 == $id)
+        {
+            return $this->redirect()->toRoute('user', ['action' => 'addUserMember']);
+        }
+                       
+        // Initialize member model.
+        $session = new Container('models');
+        $memberModel = $this->serviceManager->get(MemberModel::class);
+        \Zend\Debug\Debug::dump($session->memberModelData);
+        $memberModel->exchangeArray($session->memberModelData);
+        $form->bind($memberModel->users[$id-1]);
+   
+        $request = $this->getRequest();
+        $viewData = ['id' => $id, 'form' => $form, 'model' => $memberModel];
+        $viewModel = new ViewModel($viewData);
+        $viewModel->setTemplate('/ntkp/user/add-user-member');
+        if(! $request->isPost()) {
+            return $viewModel;
+        }
+        
+        $user = $memberModel->users[$id-1];                
+        $form->setInputFilter($user->getInputFilter());
+        $form->setData($request->getPost());        
+        if(! $form->isValid())
+        {
+            return $viewModel;
+        }
+           
+        $memberModel->users[$id-1] = $user;
+        $session->memberModelData = $memberModel->getArrayCopy();
+        
+        if(! isset($memberModel->member->id) || $memberModel->member->id == 0)
+        {
+            return $this->redirect()->toRoute('member', ['action' => 'addWithModel']);
+        }
+        
+        return $this->redirect()->toUrl('/member/editWithModel/'.$memberModel->member->id.'#tab2');
+    }
+    
     /**
      * Delete current user.
      * @return \Zend\Http\Response
@@ -143,5 +228,10 @@ class UserController extends AbstractActionController {
         
         $table->deleteUser($id);
         return $this->redirect()->toRoute('user', ['action' => 'index']);
+    }
+    
+    public function testAction()
+    {
+        return $this->redirect()->toUrl('/member/editWithModel/3#tab2');
     }
 }

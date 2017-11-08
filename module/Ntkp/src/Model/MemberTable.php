@@ -53,7 +53,8 @@ class MemberTable
         if($id == 0)
         {
             $this->tableGateway->insert($data);
-            return;
+            $rows = $this->tableGateway->getAdapter()->query('SELECT max(id) FROM public.member')->execute();
+            return $rows->current()["max"];
         } 
         
         if(! $this->getMember($id)) {
@@ -64,6 +65,7 @@ class MemberTable
         }
         
         $this->tableGateway->update($data, ['id' => $id]);
+        return $id;
     }
     
     public function deleteMember($id)

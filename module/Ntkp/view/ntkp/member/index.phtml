@@ -30,7 +30,8 @@
             <td><?= $member['url'] ?></td>
             <td><?= $member['member_status'] ?></td>
             <td><a href="<?php echo $this->url('member', ['action' => 'edit', 'id' => $member['id']]) ?>">Promeni</a> |
-            <a href="<?php echo $this->url('member', ['action' => 'delete', 'id' => $member['id']]) ?>">Obriši</a></td>
+            <a href="<?php echo $this->url('member', ['action' => 'delete', 'id' => $member['id']]) ?>">Obriši</a> |
+            <a href="<?php echo $this->url('member', ['action' => 'editWithModel', 'id' => $member['id']]) ?>">Edit test</a></td>
             <td></td>
         </tr>
         <?php endforeach; ?>

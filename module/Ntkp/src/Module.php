@@ -17,6 +17,7 @@ use Ntkp\Model\MemberTable;
 use Ntkp\Controller\MemberController;
 use Ntkp\Model\MemberView;
 use Ntkp\Form\MemberForm;
+use Ntkp\Model\MemberModel;
 
 
 /**
@@ -48,6 +49,11 @@ class Module implements ConfigProviderInterface {
                     $memberView = new MemberView($dbAdapter);
                     return $memberView;
                 },
+                MemberModel::class => function($container) {
+                    $memberModel = new MemberModel($container);
+                    return $memberModel;
+                },
+                
                 /* Gateways */
                 Model\UserTableGateway::class => function($sm) {
                     $dbAdapter = $sm->get(AdapterInterface::class);

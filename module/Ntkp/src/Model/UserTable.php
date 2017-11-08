@@ -11,6 +11,7 @@ namespace Ntkp\Model;
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Db\Adapter\Exception\RuntimeException;
 use Ntkp\Model\User;
+use Zend\Db\Sql\Sql;
 
 /**
  * Description of UserTable
@@ -61,7 +62,8 @@ class UserTable {
         if($id == 0)
         {
             $this->tableGateway->insert($data);
-            return;
+            $rows = $this->tableGateway->getAdapter()->query('SELECT max(id) FROM public.user')->execute();            
+            return $rows->current()["max"];                              
         }
         
         if(! $this->getUser($id)) {
@@ -72,10 +74,13 @@ class UserTable {
         }
         
         $this->tableGateway->update($data, ['id' => $id]);
+        
+        return $id;
     }
     
     public function deleteUser($id)
     {
+        
         $this->tableGateway->delete(['id' => (int) $id]);
     }
 }

@@ -1,0 +1,121 @@
+<?php
+// module/Ntkp/view/ntkp/user/add.phtml
+$title = "Dodaj novog korisnika";
+if(isset($id))
+{
+    $title = "Promeni korisničke podatke";
+}
+$this->headTitle($title);
+
+?>
+
+<h1><?= $this->escapehtml($title) ?></h1>
+
+<?php 
+    $name = $form->get('name');
+    $name->setAttribute('class', 'form-control');
+    $name->setAttribute('placeholder', 'Ime korisnika ...');
+    
+    $email = $form->get('email');
+    $email->setAttribute('class', 'form-control');
+    $email->setAttribute('placeholder', 'E-mail ...');
+    
+    $username = $form->get('username');
+    $username->setAttribute('class', 'form-control');
+    $username->setAttribute('placeholder', 'Korisnicko ime ...');
+    
+    $password = $form->get('password');
+    $password->setAttribute('class', 'form-control');
+    
+    $description = $form->get('description');
+    $description->setAttribute('class', 'form-control');
+    $description->setAttribute('placeholder', 'Kratak opis ...');
+    
+    $roleId = $form->get('role_id');
+    $roleId->setAttribute('class', 'form-control');
+    
+    $userStatusId = $form->get('user_status_id');
+    $userStatusId->setAttribute('class', 'form-control');
+    
+    $submit = $form->get('submit');
+    $submit->setAttribute('class', 'btn btn-primary');
+    
+
+    if(isset($id))
+    {
+        $form->setAttribute('action', $this->url('user', ['action' => 'editUserMember', 'id' => $id]));
+    } else {
+        $form->setAttribute('action', $this->url('user', ['action' => 'addUserMember']));
+    }
+    
+    $form->prepare();
+        
+    echo $this->form()->openTag($form);    
+    echo $this->formHidden($form->get('id'));
+?>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($name) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($name);?>
+        <?php echo $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($username) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($username);?>
+        <?php echo $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($email) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($email);?>
+        <?php echo $this->formElementErrors()->render($email, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($password) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($password);?>
+        <?php echo $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($description) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($description);?>
+        <?php echo $this->formElementErrors()->render($description, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($roleId) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($roleId);?>
+        <?php echo $this->formElementErrors()->render($roleId, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($userStatusId) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($userStatusId);?>
+        <?php echo $this->formElementErrors()->render($userStatusId, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<?php echo $this->formSubmit($submit) ?>
+<?php if(isset($model->member->id) && ((int) $model->member->id) != 0): ?>
+	
+<a href="/member/editWithModel/<?php echo $model->member->id?>#tab2" class="btn btn-default" style="margin-left: 20px">Nazad</a>
+<?php else: ?>
+	<a href="<?php echo $this->url('member', ['action' => 'addWithModel'])?>" class="btn btn-default" style="margin-left: 20px">Nazad</a>
+<?php endif; ?>
+<?php echo $this->form()->closeTag() ?>
+    
