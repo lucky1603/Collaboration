@@ -13,6 +13,7 @@ use Zend\Db\Adapter\Exception\RuntimeException;
 use Ntkp\Model\User;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Where;
+use Zend\Db\TableGateway\TableGateway;
 
 /**
  * Description of UserTable
@@ -117,5 +118,23 @@ class UserTable {
         $where = new Where();
         $where->in('id', $ids);
         $this->tableGateway->delete($where);
+    }
+    
+    public function getUserCompany($user_id)
+    {
+        $sql = new Sql($this->tableGateway->getAdapter());
+        $select = $sql->select();
+        $select->from('user_member')
+                ->join(['m' => 'member'], 'member_id = m.id', ['MemberName' => 'name'])
+                ->where(['user_id' => $user_id]);
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $rows = $statement->execute();
+        if($rows->count() > 0)
+        {
+            $row = $rows->current();
+            return $row['MemberName'];
+        }
+        
+        return "none";
     }
 }

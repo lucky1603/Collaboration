@@ -17,6 +17,7 @@
             <th>e-mail</th>
             <th>Rola</th>       
             <th>Status</th>     
+            <th>Subjekt</th>
             <th>Akcija</th>
         </tr>
     </thead>
@@ -30,6 +31,11 @@
             <td><?= $user->email ?></td>
             <td><?= $user->role_id ?></td>
             <td><?= $user->user_status_id ?></td>
+            <?php if($user->company == 'none'):?>
+            	<td style="color:red"><?= $user->company ?></td>
+            <?php else: ?>
+            	<td style="color:blue"><?= $user->company ?></td>
+            <?php endif;?>
             <td><a href="<?= $this->url('user', ['action' => 'edit', 'id' => $user->id]) ?>">Edit</a>  |
             <a id="delete" href="<?= $this->url('user', ['action' => 'delete', 'id' => $user->id]) ?>">Delete</a></td>
         </tr>
