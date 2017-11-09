@@ -18,6 +18,7 @@ use Ntkp\Controller\MemberController;
 use Ntkp\Model\MemberView;
 use Ntkp\Form\MemberForm;
 use Ntkp\Model\MemberModel;
+use Ntkp\Controller\AjaxController;
 
 
 /**
@@ -87,6 +88,9 @@ class Module implements ConfigProviderInterface {
                 },
                 MemberController::class => function($container) {
                     return new MemberController($container);
+                }, 
+                AjaxController::class => function($container) {
+                    return new AjaxController($container);
                 }
             ],
         ];        

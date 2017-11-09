@@ -120,7 +120,6 @@ class MemberModel
         // is it update or insert
         if(isset($this->member->id) && (int)$this->member->id != 0)
         {
-            echo "has id and it is ".$this->member->id.'<br />';
             // update
             $memberTable->saveMember($this->member);
             
@@ -143,7 +142,7 @@ class MemberModel
         } else {
             // insert
             $member_id = $memberTable->saveMember($this->member);
-            
+            $retUsers = array();
             if(isset($this->users) && count($this->users) > 0)
             {
                 $userMemberGateway = new TableGateway('user_member', $this->dbAdapter);
@@ -151,16 +150,62 @@ class MemberModel
                 $userTable = $this->serviceManager->get(UserTable::class);
                 foreach($this->users as $user)
                 {
-                    if(isset($user->id))
+                    if(isset($user->id) && $user->id != 0)
                     {
                         $userTable->saveUser($user);
                     } else {
                         $id = $userTable->saveUser($user);
                         $userMemberGateway->insert(['user_id' => $id, 'member_id' => $member_id]);
+                        $retUsers[] = ['member_id' => $member_id, 'user_id' => $id];
                     }
                 }
             }
+            
+            return $retUsers;
         }
+        
+        return "none";
+    }
+    
+    /**
+     * Delete member data.
+     */
+    public function delete()
+    {
+        // Uzmi tablu članova.
+        $memberTable = $this->serviceManager->get(MemberTable::class);
+        
+        // Proveri da li je prethodno podešen id.
+        if(isset($this->member->id) && (int)$this->member->id != 0)
+        {            
+            // Prvo proveri user-e, da li ih ima priključenih.
+            if(isset($this->users) && count($this->users) > 0)
+            {
+                // Ako ima, pokupi
+                $userMemberGateway = new TableGateway('user_member', $this->dbAdapter);
+                $rows = $userMemberGateway->select(['member_id' => $this->member->id])->toArray();
+                $userIds = array();
+                foreach($rows as $row)
+                {
+                    $userIds[] = $row['user_id'];
+                }
+
+                // I obrisi.
+                $userTable = $this->serviceManager->get(UserTable::class);
+                //$userTable->delete()->where->in('id', $userIds);
+                $userTable->deleteUsers($userIds);
+            }
+            
+            // A sada obriši i člana.
+            $memberTable->deleteMember($this->member->id);
+        }
+            
+        // A sada obriši i interne podatke.
+        unset($this->member);
+        unset($this->users);
+        
+        $this->member = new Member();
+        $this->users = array();            
     }
     
     /**

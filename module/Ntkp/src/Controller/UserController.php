@@ -182,7 +182,6 @@ class UserController extends AbstractActionController {
         // Initialize member model.
         $session = new Container('models');
         $memberModel = $this->serviceManager->get(MemberModel::class);
-        \Zend\Debug\Debug::dump($session->memberModelData);
         $memberModel->exchangeArray($session->memberModelData);
         $form->bind($memberModel->users[$id-1]);
    
@@ -229,6 +228,7 @@ class UserController extends AbstractActionController {
         $table->deleteUser($id);
         return $this->redirect()->toRoute('user', ['action' => 'index']);
     }
+    
     
     public function testAction()
     {

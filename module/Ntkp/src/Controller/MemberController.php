@@ -94,10 +94,12 @@ class MemberController extends AbstractActionController
         if(isset($session->memberModelData))
         {
             $memberModel->exchangeArray($session->memberModelData);
+            $form->bind($memberModel->member);
         } else {
             $session->memberModelData = $memberModel->getArrayCopy();
         }
-                
+                    
+        
         $request = $this->getRequest();
         if(! $request->isPost())
         {
@@ -109,10 +111,9 @@ class MemberController extends AbstractActionController
         {
             return ['form' => $form, 'model' => $memberModel];
         }
-        
-        $memberModel->member->exchangeArray($form->getData());
-        $memberModel->save();
-        
+                
+        $retVal = $memberModel->save();
+
         return $this->redirect()->toRoute('member', ['action' => 'index']);
     }
             
@@ -248,6 +249,25 @@ class MemberController extends AbstractActionController
         
         $table = $this->serviceManager->get(MemberTable::class);
         $table->deleteMember($id);
+        
+        return $this->redirect()->toRoute('member');
+    }
+    
+    /**
+     * Delete using member model.
+     * @return \Zend\Http\Response
+     */
+    public function deleteWithModelAction()
+    {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if(0 == $id)
+        {
+            return $this->redirect()->toRoute('member');
+        }
+        
+        $memberModel = $this->serviceManager->get(MemberModel::class);
+        $memberModel->setId($id);
+        $memberModel->delete();
         
         return $this->redirect()->toRoute('member');
     }

@@ -157,7 +157,7 @@ $this->headtitle($title);
      			<?php endforeach; ?> 				
      		</table>     		
      	<?php endif;?>
-     	<a href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>">Dodaj</a>
+     	<a id="new" href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>">Dodaj</a>
      </div>     
  </div>
  
@@ -171,5 +171,15 @@ $this->headtitle($title);
 <script>
 	$(document).ready(function() {
 		$("#tabs").tabs();
+		$('a#new').on('click', function(e) {
+	        e.preventDefault();
+	        var formData = $('form').serialize();
+	        $.post('/ajax/rememberMemberModel', formData, function(data) {
+	            console.log(data);
+	        });        
+	        window.location.href='/user/addUserMember';
+	    });
 	});
+
+	
 </script>

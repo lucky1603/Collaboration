@@ -29,14 +29,12 @@
             <td><?= $member['property'] ?></td>
             <td><?= $member['url'] ?></td>
             <td><?= $member['member_status'] ?></td>
-            <td><a href="<?php echo $this->url('member', ['action' => 'edit', 'id' => $member['id']]) ?>">Promeni</a> |
-            <a href="<?php echo $this->url('member', ['action' => 'delete', 'id' => $member['id']]) ?>">Obriši</a> |
-            <a href="<?php echo $this->url('member', ['action' => 'editWithModel', 'id' => $member['id']]) ?>">Edit test</a></td>
-            <td></td>
+            <td><a href="<?php echo $this->url('member', ['action' => 'editWithModel', 'id' => $member['id']]) ?>">Promeni</a> |
+            <a href="<?php echo $this->url('member', ['action' => 'deleteWithModel', 'id' => $member['id']]) ?>">Obriši</a></td>                        
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
-<a class="btn btn-primary" href="<?php echo $this->url('member', ['action' => 'add'])?>">Dodaj novog učesnika</a>
+<a class="btn btn-primary" href="<?php echo $this->url('member', ['action' => 'addWithModel'])?>">Dodaj novog učesnika</a>
 <?php endif;?>
 

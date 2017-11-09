@@ -20,12 +20,14 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Ntkp\Controller\MemberController;
+use Ntkp\Controller\AjaxController;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 
 return [
     'controllers' => [
         'factories' => [
-            /* add some factories here */
+            /* add some factories here */            
         ]
     ],
     'router' => [
@@ -55,6 +57,20 @@ return [
                     'defaults' => [
                         'controller' => MemberController::class,
                         'action' => 'index',
+                    ]
+                ],
+            ],
+            'ajax' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ajax[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]*',
+                    ],
+                    'defaults' => [
+                        'controller' => AjaxController::class,
+                        'action' => 'some',
                     ]
                 ],
             ],
