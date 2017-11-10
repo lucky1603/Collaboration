@@ -13,18 +13,18 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 
-DROP DATABASE ntkp;
+DROP DATABASE ntkp1;
 --
 -- TOC entry 2259 (class 1262 OID 24576)
 -- Name: ntkp; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE ntkp WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'English_United States.1252' LC_CTYPE = 'English_United States.1252';
+CREATE DATABASE ntkp1 WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'English_United States.1252' LC_CTYPE = 'English_United States.1252';
 
 
-ALTER DATABASE ntkp OWNER TO postgres;
+ALTER DATABASE ntkp1 OWNER TO postgres;
 
-\connect ntkp
+\connect ntkp1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
