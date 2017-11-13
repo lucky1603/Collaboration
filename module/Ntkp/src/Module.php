@@ -27,6 +27,7 @@ use Ntkp\Controller\AuthController;
 use Ntkp\Controller\LoginController;
 use Ntkp\Form\LoginForm;
 use Zend\Db\Adapter\Adapter;
+use Ntkp\Model\ActivityTable;
 
 
 /**
@@ -62,7 +63,10 @@ class Module implements ConfigProviderInterface {
                     $memberModel = new MemberModel($container);
                     return $memberModel;
                 },
-                
+                ActivityTable::class => function($container) {
+                    $tableGateway = $container->get(Model\ActivityTableGateway::class);
+                    return new ActivityTable($tableGateway);
+                },
                 /* Gateways */
                 Model\UserTableGateway::class => function($sm) {
                     $dbAdapter = $sm->get(AdapterInterface::class);
@@ -75,6 +79,12 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Member());
                     return new TableGateway('member', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\ActivityTableGateway::class => function($sm) {
+                    $dbAdapter = $sm->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Activity());
+                    return new TableGateway('activity', $dbAdapter, null, $resultSetPrototype);
                 },
                 /* Forms */
                 UserForm::class => function($sm) {

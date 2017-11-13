@@ -1,6 +1,7 @@
 <?php
     $member = $model->member;
     $users = $model->users;
+    $activities = $model->activities;
     $roles = $model->getUserRoles();
     $statuses = $model->getUserStatuses();
     $title = "Promeni podatke za člana";
@@ -60,6 +61,7 @@
  	<ul>
  		<li><a href="#tab1">Osnovni podaci</a>
  		<li><a href="#tab2">Priključeni korisnici</a>
+ 		<li><a href="#tab3">Aktivnosti</a>
  	</ul>
     <div id="tab1">         
          <div class='form-group'>
@@ -164,7 +166,31 @@
      		</table>     				
      	<?php endif;?>
      	<a href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>">Dodaj</a>
-     </div>     
+     </div>    
+     <div id="tab3">
+     	<?php if(count($activities) == 0): ?>
+     		<h3>Nema definisanih aktivnosti</h3>
+     	<?php else: ?>
+     		<table class="table">
+     			<thead>
+     				<tr>
+     					<th>Odeljak</th>
+     					<th>Šifra</th>
+     					<th>Opis</th>
+     				</tr>
+     			</thead>
+     			<tbody>
+     				<?php foreach($activities as $activity):?>
+         				<tr>
+         					<td><?php echo $activity->section ?></td>
+         					<td><?php echo $activity->class ?></td>
+         					<td><?php echo $activity->description ?></td>
+         				</tr>
+     				<?php endforeach; ?>
+     			</tbody>
+     		</table>
+     	<?php endif; ?>
+     </div> 
  </div>
  
  <div class="jumbotron">

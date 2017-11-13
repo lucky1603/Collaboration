@@ -11,6 +11,7 @@ class MemberModel
 {
     public $member;
     public $users;
+    public $activities;
     
     private $serviceManager;
     private $dbAdapter;
@@ -77,6 +78,32 @@ class MemberModel
                 $user = new User();
                 $user->exchangeArray($row);                
                 $this->users[] = $user;
+            } while ($results->next());
+        }
+        
+        // Get activities.
+        $this->activities = [];
+        $select = $this->sql->select();
+        $select->from(['ma' => 'member_activity'])
+                ->join(['a' => 'activity'], 'ma.activity_id = a.id')
+                ->where(['ma.member_id' => $id]);
+        $statement = $this->sql->prepareStatementForSqlObject($select);
+        $results = $statement->execute();
+        
+        if($results->count() > 0)
+        {
+            do {
+                $row = $results->current();               
+                $activity = new \Ntkp\Model\Activity();
+                $data = [
+                    'id' => $row['activity_id'],
+                    'section' => $row['section'],
+                    'class' => $row['class'],
+                    'description' => $row['description'],
+                ];
+                
+                $activity->exchangeArray($data);
+                $this->activities[] = $activity;
             } while ($results->next());
         }
     }
