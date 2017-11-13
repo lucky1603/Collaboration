@@ -1,0 +1,35 @@
+<?php
+$title = "Prijava na sistem";
+$this->headtitle($title);
+?>
+
+
+
+<?php 
+    $email = $form->get('email');
+    $email->setAttribute('placeholder', 'E-Mail adresa ...');
+    
+    $password = $form->get('password');
+    $submit = $form->get('submit');
+    $form->setAttribute('action', $this->url('login', ['action' => 'index']));
+    echo $this->form()->openTag($form);   
+?>
+<div class="row">
+	<div class="col-xs-4"></div>
+	<div class="col-xs-4">
+		<h1 style="margin-bottom: 100px; text-align: center"><?php echo $this->escapeHtml($title) ?></h1>	
+        <dl>        
+          <dt><?= $this->formLabel($email) ?></dt>  
+          <dd><?= $this->formElement($email)?><?php echo $this->formElementErrors()->render($email, ['class' => 'help-block']) ?></dd>
+          <dt><?= $this->formLabel($password)?></dt>
+          <dd><?= $this->formElement($password)?><?php echo $this->formElementErrors()->render($password, ['class' => 'help-block']) ?></dd>
+        </dl>	
+        <div style="text-align: center; margin-top: 100px"><?php echo $this->formsubmit($submit) ?></div>
+	</div>
+	<div class="col-xs-4"></div>	
+</div>
+
+<?php echo $this->form()->closeTag()?>
+
+
+

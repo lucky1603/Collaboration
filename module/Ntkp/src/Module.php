@@ -19,6 +19,14 @@ use Ntkp\Model\MemberView;
 use Ntkp\Form\MemberForm;
 use Ntkp\Model\MemberModel;
 use Ntkp\Controller\AjaxController;
+use Zend\Session\SessionManager;
+use Zend\Authentication\Adapter\DbTable;
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter;
+use Zend\Authentication\AuthenticationService;
+use Ntkp\Controller\AuthController;
+use Ntkp\Controller\LoginController;
+use Ntkp\Form\LoginForm;
+use Zend\Db\Adapter\Adapter;
 
 
 /**
@@ -73,7 +81,18 @@ class Module implements ConfigProviderInterface {
                     return new UserForm('UserForm', [ 'service_manager' => $sm]);
                 },
                 MemberForm::class => function($sm) {
-                    return new MemberForm('MemberFor', ['service_manager' => $sm]);
+                    return new MemberForm('MemberForm', ['service_manager' => $sm]);
+                },      
+                LoginForm::class => function($sm) {
+                    return new LoginForm('LoginForm');  
+                },
+                // Authentication Services
+                'AuthenticationService' => function($sm) {
+                    $dbAdapter = $sm->get(Adapter::class);
+                    $dbTableAuthAdapter = new CredentialTreatmentAdapter($dbAdapter, 'user', 'email', 'password', 'md5(?)');                    
+                    $authservice = new AuthenticationService();
+                    $authservice->setAdapter($dbTableAuthAdapter);
+                    return $authservice;
                 },                
             ]
         ];
@@ -91,6 +110,9 @@ class Module implements ConfigProviderInterface {
                 }, 
                 AjaxController::class => function($container) {
                     return new AjaxController($container);
+                }, 
+                LoginController::class => function($container) {
+                    return new LoginController($container);
                 }
             ],
         ];        

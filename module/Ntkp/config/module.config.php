@@ -22,16 +22,33 @@ use Zend\Db\TableGateway\TableGateway;
 use Ntkp\Controller\MemberController;
 use Ntkp\Controller\AjaxController;
 use Zend\ServiceManager\Factory\InvokableFactory;
+use Ntkp\Controller\LoginController;
+use Ntkp\Controller\IndexController;
+use Zend\Router\Http\Literal;
 
 
 return [
     'controllers' => [
         'factories' => [
             /* add some factories here */            
+            IndexController::class => InvokableFactory::class,
         ]
     ],
     'router' => [
         'routes' => [
+            'dashboard' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/[/:action]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
+                    'defaults' => [
+                        'controller' => IndexController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
             'user' => [
                 'type' => Segment::class,
                 'options' => [
@@ -74,6 +91,20 @@ return [
                     ]
                 ],
             ],
+            'login' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/login[/:action]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
+                    'defaults' => [
+                        'controller' => LoginController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            
         ]
     ],
     'service_manager' => [
