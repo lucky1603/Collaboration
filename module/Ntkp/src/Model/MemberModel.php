@@ -196,6 +196,12 @@ class MemberModel
                 }
             }
             
+            if(isset($this->activities) && count($this->activities) > 0)
+            {
+                $memberActivityGateway = new TableGateway('member_activity', $this->dbAdapter);
+                $memberActivityGateway->delete(['member_id' => $this->member->id]);
+            }
+            
         } else {
             // insert
             $member_id = $memberTable->saveMember($this->member);
@@ -299,12 +305,20 @@ class MemberModel
         return $statuses;
     }
     
+    /**
+     * Deleting the user from member.
+     * @param unknown $id
+     */
     public function deleteUser($id)
     {
         $this->deletedUsers[] = $this->users[$id];
         unset($this->users[$id]);        
     }
     
+    /**
+     * Deleting the activity from member.
+     * @param unknown $id
+     */
     public function deleteActivity($id)
     {
         $this->deletedActivities[] = $this->activities[$id];
