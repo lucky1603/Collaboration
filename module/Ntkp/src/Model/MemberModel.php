@@ -19,6 +19,8 @@ class MemberModel
     private $sql;
     private $deletedUsers;
     private $deletedActivities;
+    private $addedActivities;
+    private $addedUsers;
     
     public function __construct(ServiceManager $serviceManager, $id = null)
     {
@@ -131,6 +133,17 @@ class MemberModel
             }
         }
         
+        if(isset($data['deletedUsers']) && count($data['deletedUsers']) > 0)
+        {
+            $this->deletedUsers = array();
+            foreach($data['deletedUsers'] as $userData)
+            {
+                $user = new User();
+                $user->exchangeArray($userData);
+                $this->deletedUsers[] = $user;
+            }
+        }
+        
         if(isset($data['activities']) && count($data['activities']) > 0)
         {
             $this->activities = array();
@@ -139,6 +152,28 @@ class MemberModel
                 $activity = new Activity();
                 $activity->exchangeArray($activityData);
                 $this->activities[] = $activity;
+            }
+        }
+        
+        if(isset($data['deletedActivities']) && count($data['deletedActivities']) > 0)
+        {
+            $this->deletedActivities = array();
+            foreach($data['deletedActivities'] as $activityData)
+            {
+                $activity = new Activity();
+                $activity->exchangeArray($activityData);
+                $this->deletedActivities[] = $activity;
+            }
+        }
+        
+        if(isset($data['addedActivities']) && count($data['addedActivities']) > 0)
+        {
+            $this->addedActivities = array();
+            foreach($data['addedActivities'] as $activityData)
+            {
+                $activity = new Activity();
+                $activity->exchangeArray($activityData);
+                $this->addedActivities[] = $activity;
             }
         }
     }
@@ -157,6 +192,16 @@ class MemberModel
                        
         }
         
+        if(isset($this->deletedUsers) && count($this->deletedUsers) > 0)
+        {
+            $data['deletedUsers'] = array();
+            foreach($this->deletedUsers as $user)
+            {
+                $userData = $user->getArrayCopy();
+                $data['deletedUsers'][] = $userData;
+            }
+        }
+        
         if(isset($this->activities) && count($this->activities) > 0)
         {
             $data['activities'] = array();
@@ -164,6 +209,26 @@ class MemberModel
             {
                 $activityData = $activity->getArrayCopy();
                 $data['activities'][] = $activityData;
+            }
+        }
+        
+        if(isset($this->deletedActivities) && count($this->deletedActivities) > 0)
+        {
+            $data['deletedActivities'] = array();
+            foreach($this->deletedActivities as $activity)
+            {
+                $activityData = $activity->getArrayCopy();
+                $data['deletedActivities'][] = $activityData;
+            }
+        }
+        
+        if(isset($this->addedActivities) && count($this->addedActivities) > 0)
+        {
+            $data['addedActivities'] = array();
+            foreach($this->addedActivities as $activity)
+            {
+                $activityData = $activity->getArrayCopy();
+                $data['addedActivities'][] = $activityData;
             }
         }
         
@@ -184,6 +249,25 @@ class MemberModel
             {
                 $userMemberGateway = new TableGateway('user_member', $this->dbAdapter);
                 $userTable = $this->serviceManager->get(UserTable::class);
+                
+                // First delete the deleted entries from the table.
+                if(isset($this->deletedUsers) && count($this->deletedUsers) > 0)
+                {
+                    $deleteUserIds = array();
+                    foreach($this->deletedUsers as $user)
+                    {
+                        $userTable->deleteUser($user->id);
+                        $deleteUserIds[] = $user->id;
+                    }
+                    
+                    $delete = $this->sql->delete();
+                    $delete->from('user_member')
+                            ->where->in('user_id', $deleteUserIds);
+                    $statement = $this->sql->prepareStatementForSqlObject($delete);
+                    $statement->execute();
+                }
+                
+                // Update or insert users.
                 foreach($this->users as $user)
                 {
                     if(isset($user->id) && $user->id != 0)
@@ -196,10 +280,37 @@ class MemberModel
                 }
             }
             
-            if(isset($this->activities) && count($this->activities) > 0)
+            $memberActivityGateway = new TableGateway('member_activity', $this->dbAdapter);
+            
+            // First delete what is to be deleted.
+            if(isset($this->deletedActivities) && count($this->deletedActivities) > 0)
             {
-                $memberActivityGateway = new TableGateway('member_activity', $this->dbAdapter);
-                $memberActivityGateway->delete(['member_id' => $this->member->id]);
+                $deletedActivitiesIds = array();
+                foreach($this->deletedActivities as $activity)
+                {
+                    $deletedActivitiesIds[] = $activity->id;
+                }
+                
+                $delete = $this->sql->delete();
+                $delete->from('member_activity')
+                ->where->in('activity_id', $deletedActivitiesIds);
+                $statement = $this->sql->prepareStatementForSqlObject($delete);
+                $statement->execute();
+            }
+            
+            // Update or add the existing ones.
+            if(isset($this->addedActivities) && count($this->addedActivities) > 0)
+            {
+                
+                foreach($this->addedActivities as $activity)
+                {
+                    $data = [
+                        'member_id' => $this->member->id,
+                        'activity_id' => $activity->id,
+                    ];
+                    
+                    $memberActivityGateway->insert($data);
+                }
             }
             
         } else {
@@ -224,6 +335,21 @@ class MemberModel
                 }
             }
             
+            // Update or add the existing ones.
+            if(isset($this->addedActivities) && count($this->addedActivities) > 0)
+            {
+                
+                foreach($this->addedActivities as $activity)
+                {
+                    $data = [
+                        'member_id' => $this->member->id,
+                        'activity_id' => $activity->id,
+                    ];
+                    
+                    $memberActivityGateway->insert($data);
+                }
+            }
+         
             return $retUsers;
         }
         
@@ -305,6 +431,18 @@ class MemberModel
         return $statuses;
     }
     
+    public function addUser(User $user)
+    {
+        $this->users[] = $user;
+        $this->addedUsers[] = $user;
+    }
+    
+    public function addActivity(Activity $activity)
+    {
+        $this->activities[] = $activity;
+        $this->addedActivities[] = $activity;
+    }
+    
     /**
      * Deleting the user from member.
      * @param unknown $id
@@ -324,6 +462,8 @@ class MemberModel
         $this->deletedActivities[] = $this->activities[$id];
         unset($this->activities[$id]);
     }
+    
+    
     
 }
 

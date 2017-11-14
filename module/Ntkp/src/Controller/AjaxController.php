@@ -91,6 +91,10 @@ class AjaxController extends AbstractActionController
         return $this->viewModel;
     }
     
+    /**
+     * Add a reference to an activity to a member.
+     * @return \Zend\View\Model\ViewModel
+     */
     public function addMemberActivityAction()
     {
         $session = new Container('models');
@@ -103,7 +107,7 @@ class AjaxController extends AbstractActionController
         $activity = $activityTable->getActivity($activity_id);
         if($activity)
         {
-            $memberModel->activities[] = $activity;
+            $memberModel->addActivity($activity);
             $session->memberModelData = $memberModel->getArrayCopy();
             $this->viewModel->setVariable('response', json_encode($activity));
             return $this->viewModel;
@@ -113,6 +117,10 @@ class AjaxController extends AbstractActionController
         return $this->viewModel;
     }
     
+    /**
+     * Deletes the reference to an activity from a member.
+     * @return \Zend\View\Model\ViewModel
+     */
     public function deleteMemberActivityAction()
     {
         $id = (int) $this->params()->fromRoute('id', 0);

@@ -229,7 +229,7 @@ class MemberController extends AbstractActionController
             $session->memberModelData = $memberModel->getArrayCopy();
             return $viewModel;
         }
-        
+
         $memberModel->save();
         unset($session->memberModelData);
         

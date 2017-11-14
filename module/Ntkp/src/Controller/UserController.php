@@ -111,7 +111,7 @@ class UserController extends AbstractActionController {
             return ['form' => $form, 'model' => $memberModel];
         }
         
-        $memberModel->users[] = $user;
+        $memberModel->addUser($user);
         $session->memberModelData = $memberModel->getArrayCopy();
         
         if(! isset($memberModel->member->id) || $memberModel->member->id == 0)
@@ -173,8 +173,8 @@ class UserController extends AbstractActionController {
         $form = $this->serviceManager->get(UserForm::class);
         $form->get('submit')->setValue('Promeni korisnika');
         
-        $id = (int) $this->params()->fromRoute('id', 0);
-        if(0 == $id)
+        $id = (int) $this->params()->fromRoute('id', -1);
+        if(-1 == $id)
         {
             return $this->redirect()->toRoute('user', ['action' => 'addUserMember']);
         }
@@ -183,7 +183,7 @@ class UserController extends AbstractActionController {
         $session = new Container('models');
         $memberModel = $this->serviceManager->get(MemberModel::class);
         $memberModel->exchangeArray($session->memberModelData);
-        $form->bind($memberModel->users[$id-1]);
+        $form->bind($memberModel->users[$id]);
    
         $request = $this->getRequest();
         $viewData = ['id' => $id, 'form' => $form, 'model' => $memberModel];
@@ -193,7 +193,7 @@ class UserController extends AbstractActionController {
             return $viewModel;
         }
         
-        $user = $memberModel->users[$id-1];                
+        $user = $memberModel->users[$id];                
         $form->setInputFilter($user->getInputFilter());
         $form->setData($request->getPost());        
         if(! $form->isValid())
@@ -201,7 +201,7 @@ class UserController extends AbstractActionController {
             return $viewModel;
         }
            
-        $memberModel->users[$id-1] = $user;
+        $memberModel->users[$id] = $user;
         $session->memberModelData = $memberModel->getArrayCopy();
         
         if(! isset($memberModel->member->id) || $memberModel->member->id == 0)
@@ -227,6 +227,28 @@ class UserController extends AbstractActionController {
         
         $table->deleteUser($id);
         return $this->redirect()->toRoute('user', ['action' => 'index']);
+    }
+    
+    /**
+     * Deletes the user from the member.
+     * @return \Zend\Http\Response
+     */
+    public function deleteMemberUserAction()
+    {
+        $memberModel = $this->serviceManager->get(MemberModel::class);
+        $session = new Container('models');
+        $memberModel->exchangeArray($session->memberModelData);
+        
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if(0 == $id)
+        {
+            return $this->redirect()->toUrl('/member/editWithModel/'.$memberModel->member->id.'#tab2');
+        }
+        
+        $memberModel->deleteUser($id);
+        $session->memberModelData = $memberModel->getArrayCopy();
+        
+        return $this->redirect()->toUrl('/member/editWithModel/'.$memberModel->member->id.'#tab2');
     }
     
     
