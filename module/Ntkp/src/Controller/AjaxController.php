@@ -7,7 +7,10 @@ use Zend\Mvc\MvcEvent;
 use Zend\Authentication\Storage\Session;
 use Zend\ServiceManager\ServiceManager;
 use Ntkp\Model\MemberModel;
+use Ntkp\Model\ActivityTable;
 use Zend\Session\Container;
+use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Adapter\Adapter;
 
 class AjaxController extends AbstractActionController
 {
@@ -33,6 +36,10 @@ class AjaxController extends AbstractActionController
         return $this->viewModel->setVariable('response', json_encode("Hej!!!"));
     }
     
+    /**
+     * Saves member model to the post session.
+     * @return \Zend\View\Model\ViewModel
+     */
     public function rememberMemberModelAction()
     {        
         $post = $this->request->getPost();               
@@ -47,6 +54,81 @@ class AjaxController extends AbstractActionController
         $session->memberModelData = $memberModel->getArrayCopy();
                 
         $this->viewModel->setVariable('response', json_encode($session->memberModelData));
+        return $this->viewModel;
+    }
+    
+    
+    /**
+     * Gets the list of the available activity sections.
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function getActivitySectionsAction()
+    {
+        $adapter = $this->serviceManager->get(Adapter::class);
+        $tableGateway = new TableGateway('activity_section', $adapter);
+        $rows = $tableGateway->select()->toArray();
+        $this->viewModel->setVariable('response', json_encode($rows));
+        return $this->viewModel;
+    }
+    
+    /**
+     * Get all activities for the given section. If no section is defined, it returns all activities.
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function getActivitiesAction()
+    {
+        $section = $this->request->getPost('section');
+        $adapter = $this->serviceManager->get(Adapter::class);
+        $tableGateway = new TableGateway('activity', $adapter);
+        if($section)
+        {
+            $rows = $tableGateway->select(['section' => $section])->toArray();
+        } else {
+            $rows = $tableGateway->select()->toArray();
+        }
+        
+        $this->viewModel->setVariable('response', json_encode($rows));
+        return $this->viewModel;
+    }
+    
+    public function addMemberActivityAction()
+    {
+        $session = new Container('models');
+        $memberModel = $this->serviceManager->get(MemberModel::class);
+        $memberModel->exchangeArray($session->memberModelData);
+        $member_id = $memberModel->member->id;
+        
+        $activity_id = $this->request->getPost('activity_id');
+        $activityTable = $this->serviceManager->get(ActivityTable::class);
+        $activity = $activityTable->getActivity($activity_id);
+        if($activity)
+        {
+            $memberModel->activities[] = $activity;
+            $session->memberModelData = $memberModel->getArrayCopy();
+            $this->viewModel->setVariable('response', json_encode($activity));
+            return $this->viewModel;
+        }
+        
+        $this->viewModel->setVariable('response', json_encode('FAIL'));
+        return $this->viewModel;
+    }
+    
+    public function deleteMemberActivityAction()
+    {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if(0 == $id)
+        {
+            $this->viewModel->setVariable('response', json_encode('id is 0'));
+            return $this->viewModel;
+        }
+        
+        $session = new Container('models');
+        $memberModel = $this->serviceManager->get(MemberModel::class);
+        $memberModel->exchangeArray($session->memberModelData);
+        
+        $memberModel->deleteActivity($id);
+        $session->memberModelData = $memberModel->getArrayCopy();
+        $this->viewModel->setVariable('response', json_encode('success'));
         return $this->viewModel;
     }
 }

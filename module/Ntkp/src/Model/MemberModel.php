@@ -13,9 +13,12 @@ class MemberModel
     public $users;
     public $activities;
     
+    
     private $serviceManager;
     private $dbAdapter;
     private $sql;
+    private $deletedUsers;
+    private $deletedActivities;
     
     public function __construct(ServiceManager $serviceManager, $id = null)
     {
@@ -23,6 +26,9 @@ class MemberModel
         $this->dbAdapter = $this->serviceManager->get(Adapter::class);
         $this->sql = new Sql($this->dbAdapter);
         $this->users = array();
+        $this->activities = array();
+        $this->deletedUsers = array();
+        $this->deletedActivities = array();
         
         if($id != null)
         {
@@ -106,6 +112,9 @@ class MemberModel
                 $this->activities[] = $activity;
             } while ($results->next());
         }
+        
+        $this->deletedActivities = array();
+        $this->deletedUsers = array();
     }
     
     public function exchangeArray($data)
@@ -119,6 +128,17 @@ class MemberModel
                 $user = new User();
                 $user->exchangeArray($userData);
                 $this->users[] = $user;
+            }
+        }
+        
+        if(isset($data['activities']) && count($data['activities']) > 0)
+        {
+            $this->activities = array();
+            foreach($data['activities'] as $activityData)
+            {
+                $activity = new Activity();
+                $activity->exchangeArray($activityData);
+                $this->activities[] = $activity;
             }
         }
     }
@@ -135,6 +155,16 @@ class MemberModel
                 $data['users'][] = $userData;            
             }
                        
+        }
+        
+        if(isset($this->activities) && count($this->activities) > 0)
+        {
+            $data['activities'] = array();
+            foreach($this->activities as $activity)
+            {
+                $activityData = $activity->getArrayCopy();
+                $data['activities'][] = $activityData;
+            }
         }
         
         return $data;
@@ -269,7 +299,17 @@ class MemberModel
         return $statuses;
     }
     
+    public function deleteUser($id)
+    {
+        $this->deletedUsers[] = $this->users[$id];
+        unset($this->users[$id]);        
+    }
     
+    public function deleteActivity($id)
+    {
+        $this->deletedActivities[] = $this->activities[$id];
+        unset($this->activities[$id]);
+    }
     
 }
 

@@ -1,4 +1,5 @@
 <?php
+    $this->headScript()->appendFile('/js/activities.js');  
     $member = $model->member;
     $users = $model->users;
     $activities = $model->activities;
@@ -151,7 +152,7 @@
      				</tr>
      			</thead>
      			<tbody>
-     			<?php $counter = 1; ?>
+     			<?php $counter = 0; ?>
      			<?php foreach($users as $user): ?>
      				<tr>
      					<td><?php echo $user->name ?></td>
@@ -168,28 +169,55 @@
      	<a href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>">Dodaj</a>
      </div>    
      <div id="tab3">
-     	<?php if(count($activities) == 0): ?>
-     		<h3>Nema definisanih aktivnosti</h3>
-     	<?php else: ?>
-     		<table class="table">
-     			<thead>
-     				<tr>
-     					<th>Odeljak</th>
-     					<th>Šifra</th>
-     					<th>Opis</th>
-     				</tr>
-     			</thead>
-     			<tbody>
-     				<?php foreach($activities as $activity):?>
+        <div class="lista-aktivnosti">
+         	<?php if(count($activities) == 0): ?>
+         		<h3>Nema definisanih aktivnosti</h3>
+         	<?php else: ?>
+         		<table class="table">
+         			<thead>
          				<tr>
-         					<td><?php echo $activity->section ?></td>
-         					<td><?php echo $activity->class ?></td>
-         					<td><?php echo $activity->description ?></td>
+         					<th>Odeljak</th>
+         					<th>Šifra</th>
+         					<th>Opis</th>
+         					<th>Akcija</th>
          				</tr>
-     				<?php endforeach; ?>
-     			</tbody>
-     		</table>
-     	<?php endif; ?>
+         			</thead>
+         			<tbody>
+         				<?php $counter = 0; ?>
+         				<?php foreach($activities as $activity):?>
+             				<tr>
+             					<td width="5%"><?php echo $activity->section ?></td>
+             					<td width="5%"><?php echo sprintf("%02d", $activity->class) ?></td>
+             					<td><?php echo $activity->description ?></td>
+             					<td><a class="deleteActivity" href="#" data-id="<?php echo $counter;?>">Obriši</a>
+             				</tr>
+             				<?php $counter ++; ?>
+         				<?php endforeach; ?>
+         			</tbody>
+         		</table>
+         	<?php endif; ?>
+         	<a href="#" id="addAction" class="btn btn-default">Dodaj novu aktivnost</a>
+     	</div>
+     	<div class="forma-dodaj-aktivnost">
+     		<h3>Dodaj novu aktivnost</h3>
+     		<form id="activityForm" action="#">
+     			<input id="member_id" name="member_id" type="hidden" />
+     			<div class="form-group">
+     				<label class="col-xs-2 control-label" for="section_id">Sekcija</label>
+     				<div class="col-xs-4">
+     					<select id="section_id" name="section_id" class="form-control"></select>
+     				</div>
+     			</div>
+     			<div class="form-group">
+     				<label class="col-xs-2 control-label" for="activity_id">Aktivnost</label>
+     				<div class="col-xs-8">
+     					<select id = "activity_id" name="activity_id" class="form-control"></select>
+     				</div>
+     			</div>
+     			<input id="submitActivity" type="submit" value="Potvrdi" class="btn btn-default"/>
+     			<a href="#" id="nazadNaListu" class="btn btn-default">Nazad na listu</a>
+     		</form>
+     	</div>
      </div> 
  </div>
  
@@ -203,5 +231,52 @@
 <script>
 	$(document).ready(function() {
 		$("#tabs").tabs();
+		$(".forma-dodaj-aktivnost").hide();
+		$("#addAction").click(function(evt) {
+			$(".lista-aktivnosti").hide();
+			$('.forma-dodaj-aktivnost').css('display', 'inline!important');
+			$(".forma-dodaj-aktivnost").show();
+		});
+
+		$("#nazadNaListu").click(function(evt) {
+			$(".lista-aktivnosti").show();
+			$(".forma-dodaj-aktivnost").hide();
+		});
+		
+
+		$('#submitActivity').on('click', function(e) {			
+	        e.preventDefault();	     
+	        var member = <?php echo json_encode($id) ?>;
+	        var activity = $("#activity_id option:selected").val();
+	          
+	        var formData = $('form#MemberForm').serialize();	        	       
+	        $.post('/ajax/rememberMemberModel', formData, function(data) {		        
+		        $.post('/ajax/add_member_activity', {member_id: member, activity_id: activity}, function(data) {
+		        	location.hash = '#tab3';
+		        	location.reload(); 
+		        	//$("#tab3").load(location.href + " #tab3>*", "");  	
+		        });         
+	        });
+	        //$("#tabs").tabs("option", "active", 2);
+	    });
+
+	    $('a.deleteActivity').on('click', function(e) {
+		    e.preventDefault();
+		    var element = e.target;
+		    var id = $(element).data('id');
+		    var formData = $('form#MemberForm').serialize();	        	       
+	        $.post('/ajax/rememberMemberModel', formData, function(data) {		        	
+	        	$.get('/ajax/delete_member_activity/' + id, function(data) {
+		        	console.log(JSON.parse(data));
+		        	//$("#tab3").load(location.href + " #tab3>*", "");
+		        	location.hash = '#tab3';
+		        	location.reload(); 
+		        	
+		        });         
+	        });
+		    
+	    });
+	    
+		
 	});
 </script>

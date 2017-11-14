@@ -14,6 +14,7 @@ use Zend\Authentication\Storage\Session;
 use Zend\Session\Container;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\Adapter;
+use Ntkp\Model\ActivityTable;
 
 /**
  * MemberController class. It handles the collaboration members.
@@ -271,8 +272,6 @@ class MemberController extends AbstractActionController
         
         return $this->redirect()->toRoute('member');
     }
-    
-    
     
     public function testAction()
     {
