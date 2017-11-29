@@ -22,7 +22,6 @@ class LoginController extends AbstractActionController
     
     public function indexAction()
     {
-        //die('dosao');
         $form = $this->serviceManager->get(LoginForm::class);
         $request = $this->getRequest();
         if(! $request->isPost())
@@ -37,6 +36,7 @@ class LoginController extends AbstractActionController
             $row = $rows->current();
             $email = $row['email'];
         } 
+                
         
         if(isset($email)) {
             $authService = $this->getAuthService();
@@ -44,6 +44,7 @@ class LoginController extends AbstractActionController
             $adapter->setIdentity($email);
             $adapter->setCredential($this->request->getPost('password'));
             $result = $authService->authenticate();
+            \Zend\Debug\Debug::dump($result);
             
             if($result->isValid()) {
                 $authService->getStorage()->write($email);
@@ -55,6 +56,13 @@ class LoginController extends AbstractActionController
         }
         
         return ['form' => $form];
+    }
+    
+    public function logoutAction()
+    {
+        $authService = $this->serviceManager->get('AuthenticationService');
+        $authService->getStorage()->write(NULL);
+        return $this->redirect()->toRoute(NULL);
     }
     
     public function getAuthService()

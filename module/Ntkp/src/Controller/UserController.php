@@ -11,6 +11,7 @@ use Ntkp\Model\User;
 use Zend\Session\Container;
 use Ntkp\Model\MemberModel;
 use Zend\Escaper\Escaper;
+use Zend\Debug\Debug;
 
 /**
  * Description of UserController
@@ -146,6 +147,8 @@ class UserController extends AbstractActionController {
         $form->bind($user);
         $form->get('submit')->setAttribute('value', 'Promeni podatke');
         
+//        Debug::dump($user->password);
+        
         $request = $this->getRequest();
         $viewData = ['id' => $id, 'form' => $form];
         $viewModel = new ViewModel($viewData);
@@ -162,7 +165,8 @@ class UserController extends AbstractActionController {
             return $viewModel;
         }
         
-        
+//        Debug::dump($user->password);
+//        die();
         $table->saveUser($user);
         
         return $this->redirect()->toRoute('user', ['action' => 'index']);
@@ -171,7 +175,7 @@ class UserController extends AbstractActionController {
     public function editUserMemberAction(){
         // Create form.
         $form = $this->serviceManager->get(UserForm::class);
-        $form->get('submit')->setValue('Promeni korisnika');
+        $form->get('submit')->setValue('Potvrdi');
         
         $id = (int) $this->params()->fromRoute('id', -1);
         if(-1 == $id)
@@ -183,9 +187,11 @@ class UserController extends AbstractActionController {
         $session = new Container('models');
         $memberModel = $this->serviceManager->get(MemberModel::class);
         $memberModel->exchangeArray($session->memberModelData);
-        $form->bind($memberModel->users[$id]);
+        $user = $memberModel->users[$id];       
+        $form->bind($user);        
+        //Debug::dump($user->password);
    
-        $request = $this->getRequest();
+        $request = $this->getRequest();                
         $viewData = ['id' => $id, 'form' => $form, 'model' => $memberModel];
         $viewModel = new ViewModel($viewData);
         $viewModel->setTemplate('/ntkp/user/add-user-member');
@@ -193,14 +199,23 @@ class UserController extends AbstractActionController {
             return $viewModel;
         }
         
-        $user = $memberModel->users[$id];                
+        $data = $request->getPost();
+        
+//        if(! isset($data['password']))
+//        {
+//            $data['password'] = $user->password;
+//        }
+        
         $form->setInputFilter($user->getInputFilter());
         $form->setData($request->getPost());        
+
         if(! $form->isValid())
         {
             return $viewModel;
         }
-           
+        
+        //Debug::dump($user->password);    
+        //die();
         $memberModel->users[$id] = $user;
         $session->memberModelData = $memberModel->getArrayCopy();
         

@@ -1,13 +1,13 @@
 <?php
-$member = $model->member;
-$users = $model->users;
-$roles = $model->getUserRoles();
-$statuses = $model->getUserStatuses();
-$title = "Dodaj novog clana";
-$this->headtitle($title);
+    $member = $model->member;
+    $users = $model->users;
+    $roles = $model->getUserRoles();
+    $statuses = $model->getUserStatuses();
+    $title = "Dodaj novog clana";
+    $this->headtitle($title);
 ?>
 
-<h1><?php echo $this->escapehtml($title) ?></h1>
+<h1 class="page-title"><?php echo $this->escapehtml($title) ?></h1>
 <?php 
     $name = $form->get('name');
     $name->setAttribute('class', 'form-control');
@@ -157,13 +157,13 @@ $this->headtitle($title);
      			<?php endforeach; ?> 				
      		</table>     		
      	<?php endif;?>
-     	<a id="new" href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>">Dodaj</a>
+     	<a id="new" href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>" class="btn btn-primary">Dodaj korisnika</a>
      </div>     
  </div>
  
  <div class="jumbotron">
  <?php echo $this->formSubmit($submit) ?>
-<a href="<?php echo $this->url('member')?>" class="btn btn-default" style="margin-left: 20px">Nazad</a>
+<a href="<?php echo $this->url('member')?>" class="btn btn-default" style="margin-left: 20px">Nazad na listu</a>
  </div>
 
 <?php echo $this->form()->closeTag() ?>

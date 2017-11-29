@@ -3,30 +3,28 @@
  * Module manager file.
  */
 namespace Ntkp;
-
+use Ntkp\Controller\AjaxController;
+use Ntkp\Controller\IndexController;
+use Ntkp\Controller\LoginController;
+use Ntkp\Controller\MemberController;
+use Ntkp\Controller\UserController;
+use Ntkp\Form\LoginForm;
+use Ntkp\Form\MemberForm;
+use Ntkp\Form\UserForm;
+use Ntkp\Model\Activity;
+use Ntkp\Model\Member;
+use Ntkp\Model\MemberModel;
+use Ntkp\Model\MemberTable;
+use Ntkp\Model\MemberView;
+use Ntkp\Model\User;
+use Ntkp\Model\UserTable;
+use Zend\Db\Adapter\Adapter;
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter;
+use Zend\Authentication\AuthenticationService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Ntkp\Model\Activity;
-use Ntkp\Model\UserTable;
-use Ntkp\Model\User;
-use Ntkp\Controller\UserController;
-use Ntkp\Form\UserForm;
-use Ntkp\Model\Member;
-use Ntkp\Model\MemberTable;
-use Ntkp\Controller\MemberController;
-use Ntkp\Model\MemberView;
-use Ntkp\Form\MemberForm;
-use Ntkp\Model\MemberModel;
-use Ntkp\Controller\AjaxController;
-use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter;
-use Zend\Authentication\AuthenticationService;
-use Ntkp\Controller\LoginController;
-use Ntkp\Form\LoginForm;
-use Zend\Db\Adapter\Adapter;
-use Ntkp\Model\ActivityTable;
-
 
 /**
  * Description of Module
@@ -121,6 +119,9 @@ class Module implements ConfigProviderInterface {
                 }, 
                 LoginController::class => function($container) {
                     return new LoginController($container);
+                },
+                IndexController::class => function($container) {
+                    return new IndexController($container);
                 }
             ],
         ];        

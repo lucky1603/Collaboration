@@ -30,8 +30,7 @@ use Zend\Router\Http\Literal;
 return [
     'controllers' => [
         'factories' => [
-            /* add some factories here */            
-            IndexController::class => InvokableFactory::class,
+            /* add some factories here */                        
         ]
     ],
     'router' => [

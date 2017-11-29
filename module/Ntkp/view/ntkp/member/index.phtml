@@ -1,7 +1,9 @@
 <?php
-
+    $title = "UČESNICI KOLABORACIJE"; 
+    $this->headTitle($title);
 ?>
-<h1>UČESNICI</h1>
+
+<h1 class="page-title"><?php echo $this->escapeHtml($title) ?></h1>
 <?php if($members->count() == 0): ?>
 	<p>Nažalost, tabela članova je prazna.</p>
 <?php else: ?>

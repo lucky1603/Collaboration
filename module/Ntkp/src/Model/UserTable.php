@@ -62,6 +62,25 @@ class UserTable {
         return $row;
     }
     
+    public function getUserbyEmail($email)
+    {
+        $rowset = $this->tableGateway->select(['email' => $email]);
+        if($rowset->count() == 0)
+        {
+            return null;
+        }
+        
+        $user = $rowset->current();
+        if(! $user) {
+            throw new RuntimeException(sprintf(
+                'Could not find user with identifier $d',
+                $id
+            ));
+        }
+        
+        return $user;
+    }
+    
     /**
      * Čuva korisnika u bazi.
      * @param User $user

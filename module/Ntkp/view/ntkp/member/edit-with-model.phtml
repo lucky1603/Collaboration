@@ -9,7 +9,7 @@
     $this->headtitle($title);
 ?>
 
-<h1><?php echo $this->escapehtml($title) ?></h1>
+<h1 class="page-title"><?php echo $this->escapehtml($title) ?></h1>
 <?php 
     $name = $form->get('name');
     $name->setAttribute('class', 'form-control');
@@ -159,14 +159,16 @@
      					<td><?php echo $user->email ?></td>
      					<td><?php echo $roles[$user->role_id] ?></td>
      					<td><?php echo $statuses[$user->user_status_id] ?></td>     					
-     					<td><a href="<?php echo $this->url('user', ['action' => 'editUserMember', 'id' => $counter]) ?>">Izmeni</a></td>     					
+     					<td><a href="<?php echo $this->url('user', ['action' => 'editUserMember', 'id' => $counter])?>" style="color: #1f8ecd">Izmeni</a> | 
+                                            <a href="<?php echo $this->url('user', ['action' => 'deleteMemberUser', 'id' => $counter])?>" style="color: #1f8ecd">Obriši</a>                                        
+                                        </td>     					
      				</tr>
      			</tbody>
      			<?php $counter ++; ?>
      			<?php endforeach; ?> 	     				
      		</table>     				
      	<?php endif;?>
-     	<a href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>">Dodaj</a>
+     	<a href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>" class="btn btn-default">Dodaj korisnika</a>
      </div>    
      <div id="tab3">
         <div class="lista-aktivnosti">
@@ -189,7 +191,7 @@
              					<td width="5%"><?php echo $activity->section ?></td>
              					<td width="5%"><?php echo sprintf("%02d", $activity->class) ?></td>
              					<td><?php echo $activity->description ?></td>
-             					<td><a class="deleteActivity" href="#" data-id="<?php echo $counter;?>">Obriši</a>
+             					<td><a class="deleteActivity" href="#" data-id="<?php echo $counter;?>" style="color: #1f8ecd">Obriši</a>
              				</tr>
              				<?php $counter ++; ?>
          				<?php endforeach; ?>
@@ -223,7 +225,7 @@
  
  <div class="jumbotron">
  <?php echo $this->formSubmit($submit) ?>
-<a href="<?php echo $this->url('member')?>" class="btn btn-default" style="margin-left: 20px">Nazad</a>
+<a href="<?php echo $this->url('member')?>" class="btn btn-default" style="margin-left: 20px">Nazad na listu</a>
  </div>
 
 <?php echo $this->form()->closeTag() ?>

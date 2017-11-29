@@ -32,11 +32,18 @@ class User implements InputFilterAwareInterface {
     public $description;
     public $user_status_id;
     
+    private $raw_password;    
     private $inputFilter;
     
     public function setPassword($clearPassword)
     {
         $this->password = md5($clearPassword);
+    }
+    
+    public function setRawPassword($password)
+    {
+        $this->raw_password = $password;
+        $this->setPassword($password);
     }
     
     public function exchangeArray($user)
@@ -53,6 +60,11 @@ class User implements InputFilterAwareInterface {
         {
             $this->setPassword($user['password']);
         }     
+        
+        if(isset($user['raw_password']))
+        {
+            $this->setRawPassword($user['raw_password']);
+        }
                   
     }
     
@@ -67,6 +79,7 @@ class User implements InputFilterAwareInterface {
             'password' => $this->password,
             'description' => $this->description,
             'user_status_id' => $this->user_status_id,
+            'raw_password' => $this->raw_password,
         ];
     }
     /**

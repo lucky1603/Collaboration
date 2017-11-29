@@ -88,7 +88,7 @@ class MemberController extends AbstractActionController
     public function addWithModelAction()
     {
         $form = $this->serviceManager->get(MemberForm::class);
-        $form->get('submit')->setValue('Dodaj člana');
+        //$form->get('submit')->setValue('Dodaj člana');
         $session = new Container('models');
         $memberModel = $this->serviceManager->get(MemberModel::class);
 
@@ -192,9 +192,11 @@ class MemberController extends AbstractActionController
         
         $form = $this->serviceManager->get(MemberForm::class);
         $form->bind($memberModel->member);
-        $form->get('submit')->setAttribute('value', 'Promeni podatke');
+        //$form->get('submit')->setAttribute('value', 'Promeni podatke');
         
         $request = $this->getRequest();
+//        \Zend\Debug\Debug::dump($request);
+//        die();
         $dbAdapter = $this->serviceManager->get(Adapter::class);
         
         $table = new TableGateway('role', $dbAdapter);
