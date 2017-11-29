@@ -64,7 +64,7 @@ class UserForm extends Form {
             ],
         ]);
                 
-        $password = new Element\Password("password");
+        $password = new Element\Password("raw_password");
         $password->setLabel("Lozinka");
         $password->setLabelAttributes([
             'class' => 'control-label col-xs-2', 

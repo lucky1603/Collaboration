@@ -24,7 +24,7 @@ $this->headTitle($title);
     $username->setAttribute('class', 'form-control');
     $username->setAttribute('placeholder', 'Korisnicko ime ...');
     
-    $password = $form->get('password');
+    $password = $form->get('raw_password');
     $password->setAttribute('class', 'form-control');
     
     $description = $form->get('description');

@@ -55,12 +55,7 @@ class User implements InputFilterAwareInterface {
         $this->username = isset($user['username']) ? $user['username'] : null;
         $this->description = isset($user['description']) ? $user['description'] : null;
         $this->user_status_id = isset($user['user_status_id']) ? $user['user_status_id'] : null;
-                
-        if(isset($user['password']))
-        {
-            $this->setPassword($user['password']);
-        }     
-        
+        $this->password = isset($user['password']) ? $user['password'] : null;        
         if(isset($user['raw_password']))
         {
             $this->setRawPassword($user['raw_password']);
@@ -154,7 +149,7 @@ class User implements InputFilterAwareInterface {
         $email->getValidatorChain()->attach(new Validator\EmailAddress());
         $inputFilter->add($email);
         
-        $password = new Input('password');
+        $password = new Input('raw_password');
         $password->getValidatorChain()->attach(new Validator\StringLength(8));
         $inputFilter->add($password);
         
