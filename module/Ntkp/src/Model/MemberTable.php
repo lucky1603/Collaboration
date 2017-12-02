@@ -47,6 +47,7 @@ class MemberTable
             'email' => $member->email,
             'url' => $member->url,
             'member_status_id' => $member->member_status_id,
+            'kontakt_osoba' => $member->kontakt_osoba,
         ];
         
         $id = (int) $member->id;

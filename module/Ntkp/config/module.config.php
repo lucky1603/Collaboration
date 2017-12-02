@@ -9,6 +9,7 @@
 namespace Ntkp;
 
 use Ntkp\Controller\UserController;
+use Ntkp\Controller\RegisterController;
 use Ntkp\Model\Role;
 use Ntkp\Model\RoleModel;
 use Ntkp\Model\UserStatus;
@@ -102,6 +103,20 @@ return [
                         'action' => 'index',
                     ]
                 ],
+            ],
+            'register' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/register[/:action]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
+                    'defaults' => [
+                        'controller' => \Ntkp\Controller\RegisterController::class,
+                        'action' => 'index',
+                    ], 
+                ],
+                     
             ],
             
         ]

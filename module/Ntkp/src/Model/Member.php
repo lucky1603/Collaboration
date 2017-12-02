@@ -20,6 +20,7 @@ class Member
     public $email;
     public $url;
     public $member_status_id;
+    public $kontakt_osoba;
     
     public function exchangeArray($data)
     {
@@ -34,6 +35,7 @@ class Member
         $this->email = isset($data['email']) ? $data['email'] : null;
         $this->url = isset($data['url']) ? $data['url'] : null;
         $this->member_status_id = isset($data['member_status_id']) ? $data['member_status_id'] : null;
+        $this->kontakt_osoba = isset($data['kontakt_osoba']) ? $data['kontakt_osoba'] : null;
     }
     
     public function getArrayCopy() 
@@ -50,6 +52,7 @@ class Member
             'email' => $this->email,
             'url' => $this->url,
             'member_status_id' => $this->member_status_id,
+            'kontakt_osoba' => $this->kontakt_osoba,
         ];
     }
 }

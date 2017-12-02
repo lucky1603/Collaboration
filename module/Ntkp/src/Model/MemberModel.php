@@ -44,7 +44,7 @@ class MemberModel
     {
         $select = $this->sql->select();
         $select->from('member')
-        ->columns(['id', 'name', 'email', 'url'])
+        ->columns(['id', 'name', 'email', 'url', 'kontakt_osoba'])
         ->join(['pt' => 'property_type'], 'property_type_id = pt.id', ['property' => 'name'])
         ->join(['mt' => 'member_type'], 'member_type_id = mt.id', ['member_type' => 'name'])
         ->join(['mr' => 'member_role'], 'member_role_id = mr.id', ['member_role' => 'name'])

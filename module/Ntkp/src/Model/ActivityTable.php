@@ -1,12 +1,12 @@
 <?php
 namespace Ntkp\Model;
 
-use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\TableGateway\TableGatewayInterface;
 
 class ActivityTable
 {
     private $tableGateway;
-    public function __construct(TableGateway $tableGateway)
+    public function __construct(TableGatewayInterface $tableGateway)
     {
         $this->tableGateway = $tableGateway;
     }

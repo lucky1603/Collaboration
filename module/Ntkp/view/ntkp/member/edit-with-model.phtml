@@ -19,6 +19,9 @@
     $description->setAttribute('class', 'form-control');
     $description->setAttribute('placeholder', 'Opišite sebe u nekoliko rečenica ...');
     
+    $kontakt = $form->get('kontakt_osoba');
+    $kontakt->setAttribute('placeholder', 'Kontakt osoba ...');
+    
     $email = $form->get('email');
     $email->setAttribute('class', 'form-control');
     $email->setAttribute('placeholder', 'Email ...');
@@ -59,18 +62,18 @@
  ?>
  
  <div id="tabs">
- 	<ul>
- 		<li><a href="#tab1">Osnovni podaci</a></li>
- 		<li><a href="#tab2">Priključeni korisnici</a></li>
- 		<li><a href="#tab3">Aktivnosti</a></li>
- 	</ul>
+    <ul>
+        <li><a href="#tab1">Osnovni podaci</a></li>
+        <li><a href="#tab2">Priključeni korisnici</a></li>
+        <li><a href="#tab3">Aktivnosti</a></li>
+    </ul>
     <div id="tab1">         
-         <div class='form-group'>
-            <?php echo $this->formLabel($name) ?>
-            <div class='col-xs-10'>
-                <?php echo $this->formElement($name);?>
-                <?php echo $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
-            </div>
+        <div class='form-group'>
+           <?php echo $this->formLabel($name) ?>
+           <div class='col-xs-10'>
+               <?php echo $this->formElement($name);?>
+               <?php echo $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
+           </div>
         </div>
         
         <div class='form-group'>
@@ -78,6 +81,14 @@
             <div class='col-xs-10'>
                 <?php echo $this->formElement($description);?>
                 <?php echo $this->formElementErrors()->render($description, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+        
+        <div class='form-group'>
+            <?php echo $this->formLabel($kontakt) ?>
+            <div class='col-xs-10'>
+                <?php echo $this->formElement($kontakt);?>
+                <?php echo $this->formElementErrors()->render($kontakt, ['class' => 'help-block']) ?>
             </div>
         </div>
         
@@ -137,36 +148,36 @@
             </div>
         </div>
     </div>
-     <div id="tab2">
+    <div id="tab2">
      	<?php if(count($users) == 0): ?>
      		<p>Trenutno nema priključenih korisnika.</p>
      	<?php else: ?>
-     		<table class="table">
-     			<thead>
-     				<tr>
-     					<th>Korisnik</th>
-     					<th>Email</th>
-     					<th>Rola</th>
-     					<th>Status</th>
-     					<th>Akcija</th>
-     				</tr>
-     			</thead>
-     			<tbody>
-     			<?php $counter = 0; ?>
-     			<?php foreach($users as $user): ?>
-     				<tr>
-     					<td><?php echo $user->name ?></td>
-     					<td><?php echo $user->email ?></td>
-     					<td><?php echo $roles[$user->role_id] ?></td>
-     					<td><?php echo $statuses[$user->user_status_id] ?></td>     					
-     					<td><a href="<?php echo $this->url('user', ['action' => 'editUserMember', 'id' => $counter])?>" style="color: #1f8ecd">Izmeni</a> | 
-                                            <a href="<?php echo $this->url('user', ['action' => 'deleteMemberUser', 'id' => $counter])?>" style="color: #1f8ecd">Obriši</a>                                        
-                                        </td>     					
-     				</tr>
-     			</tbody>
-     			<?php $counter ++; ?>
-     			<?php endforeach; ?> 	     				
-     		</table>     				
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Korisnik</th>
+                        <th>Email</th>
+                        <th>Rola</th>
+                        <th>Status</th>
+                        <th>Akcija</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $counter = 0; ?>
+                <?php foreach($users as $user): ?>
+                    <tr>
+                        <td><?php echo $user->name ?></td>
+                        <td><?php echo $user->email ?></td>
+                        <td><?php echo $roles[$user->role_id] ?></td>
+                        <td><?php echo $statuses[$user->user_status_id] ?></td>     					
+                        <td><a href="<?php echo $this->url('user', ['action' => 'editUserMember', 'id' => $counter])?>" style="color: #1f8ecd">Izmeni</a> | 
+                            <a href="<?php echo $this->url('user', ['action' => 'deleteMemberUser', 'id' => $counter])?>" style="color: #1f8ecd">Obriši</a>                                        
+                        </td>     					
+                    </tr>
+                </tbody>
+                <?php $counter ++; ?>
+                <?php endforeach; ?> 	     				
+            </table>     				
      	<?php endif;?>
      	<a href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>" class="btn btn-default">Dodaj korisnika</a>
      </div>    
@@ -175,110 +186,105 @@
          	<?php if(count($activities) == 0): ?>
          		<h3>Nema definisanih aktivnosti</h3>
          	<?php else: ?>
-         		<table class="table">
-         			<thead>
-         				<tr>
-         					<th>Odeljak</th>
-         					<th>Šifra</th>
-         					<th>Opis</th>
-         					<th>Akcija</th>
-         				</tr>
-         			</thead>
-         			<tbody>
-         				<?php $counter = 0; ?>
-         				<?php foreach($activities as $activity):?>
-             				<tr>
-             					<td width="5%"><?php echo $activity->section ?></td>
-             					<td width="5%"><?php echo sprintf("%02d", $activity->class) ?></td>
-             					<td><?php echo $activity->description ?></td>
-             					<td><a class="deleteActivity" href="#" data-id="<?php echo $counter;?>" style="color: #1f8ecd">Obriši</a>
-             				</tr>
-             				<?php $counter ++; ?>
-         				<?php endforeach; ?>
-         			</tbody>
-         		</table>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Odeljak</th>
+                                <th>Šifra</th>
+                                <th>Opis</th>
+                                <th>Akcija</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $counter = 0; ?>
+                            <?php foreach($activities as $activity):?>
+                            <tr>
+                                <td width="5%"><?php echo $activity->section ?></td>
+                                <td width="5%"><?php echo sprintf("%02d", $activity->class) ?></td>
+                                <td><?php echo $activity->description ?></td>
+                                <td><a class="deleteActivity" href="#" data-id="<?php echo $counter;?>" style="color: #1f8ecd">Obriši</a>
+                            </tr>
+                            <?php $counter ++; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
          	<?php endif; ?>
          	<a href="#" id="addAction" class="btn btn-default">Dodaj novu aktivnost</a>
      	</div>
      	<div class="forma-dodaj-aktivnost">
-     		<h3>Dodaj novu aktivnost</h3>
-     		
-     			
-     			<div class="form-group">
-     				<label class="col-xs-2 control-label" for="section_id">Sekcija</label>
-     				<div class="col-xs-4">
-     					<select id="section_id" name="section_id" class="form-control"></select>
-     				</div>
-     			</div>
-     			<div class="form-group">
-     				<label class="col-xs-2 control-label" for="activity_id">Aktivnost</label>
-     				<div class="col-xs-8">
-     					<select id = "activity_id" name="activity_id" class="form-control"></select>
-     				</div>
-     			</div>
-     			<a href="#" id="submitActivity" class="btn btn-default">Potvrdi</a>
-     			<a href="#" id="nazadNaListu" class="btn btn-default">Nazad na listu</a>
-     		
+            <h3>Dodaj novu aktivnost</h3>     			
+            <div class="form-group">
+                <label class="col-xs-2 control-label" for="section_id">Sekcija</label>
+                <div class="col-xs-4">
+                        <select id="section_id" name="section_id" class="form-control"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-2 control-label" for="activity_id">Aktivnost</label>
+                <div class="col-xs-8">
+                        <select id = "activity_id" name="activity_id" class="form-control"></select>
+                </div>
+            </div>
+            <a href="#" id="submitActivity" class="btn btn-default">Potvrdi</a>
+            <a href="#" id="nazadNaListu" class="btn btn-default">Nazad na listu</a>     		
      	</div>
      </div> 
  </div>
  
  <div class="jumbotron">
- <?php echo $this->formSubmit($submit) ?>
-<a href="<?php echo $this->url('member')?>" class="btn btn-default" style="margin-left: 20px">Nazad na listu</a>
+    <?php echo $this->formSubmit($submit) ?>
+    <a href="<?php echo $this->url('member')?>" class="btn btn-default" style="margin-left: 20px">Nazad na listu</a>
  </div>
 
 <?php echo $this->form()->closeTag() ?>
 
 <script>
-	$(document).ready(function() {
-		$("#tabs").tabs();
-		$(".forma-dodaj-aktivnost").hide();
-		$("#addAction").click(function(evt) {
-			$(".lista-aktivnosti").hide();
-			$('.forma-dodaj-aktivnost').css('display', 'inline!important');
-			$(".forma-dodaj-aktivnost").show();
-		});
+    $(document).ready(function() {
+        $("#tabs").tabs();
+        $(".forma-dodaj-aktivnost").hide();
+        $("#addAction").click(function(evt) {
+            $(".lista-aktivnosti").hide();
+            $('.forma-dodaj-aktivnost').css('display', 'inline!important');
+            $(".forma-dodaj-aktivnost").show();
+        });
 
-		$("#nazadNaListu").click(function(evt) {
-			$(".lista-aktivnosti").show();
-			$(".forma-dodaj-aktivnost").hide();
-		});
-		
+        $("#nazadNaListu").click(function(evt) {
+            $(".lista-aktivnosti").show();
+            $(".forma-dodaj-aktivnost").hide();
+        });
 
-		$('#submitActivity').on('click', function(e) {			
-	        e.preventDefault();	     
-	        var member = <?php echo json_encode($id) ?>;
-	        var activity = $("#activity_id option:selected").val();
-	          
-	        var formData = $('form#MemberForm').serialize();	        	       
-	        $.post('/ajax/rememberMemberModel', formData, function(data) {		        
-		        $.post('/ajax/add_member_activity', {member_id: member, activity_id: activity}, function(data) {
-		        	location.hash = '#tab3';
-		        	location.reload(); 
-		        	//$("#tab3").load(location.href + " #tab3>*", "");  	
-		        });         
-	        });
-	        //$("#tabs").tabs("option", "active", 2);
-	    });
 
-	    $('a.deleteActivity').on('click', function(e) {
-		    e.preventDefault();
-		    var element = e.target;
-		    var id = $(element).data('id');
-		    var formData = $('form#MemberForm').serialize();	        	       
-	        $.post('/ajax/rememberMemberModel', formData, function(data) {		        	
-	        	$.get('/ajax/delete_member_activity/' + id, function(data) {
-		        	console.log(JSON.parse(data));
-		        	//$("#tab3").load(location.href + " #tab3>*", "");
-		        	location.hash = '#tab3';
-		        	location.reload(); 
-		        	
-		        });         
-	        });
-		    
-	    });
-	    
-		
-	});
+        $('#submitActivity').on('click', function(e) {			
+            e.preventDefault();	     
+            var member = <?php echo json_encode($id) ?>;
+            var activity = $("#activity_id option:selected").val();
+
+            var formData = $('form#MemberForm').serialize();	        	       
+            $.post('/ajax/rememberMemberModel', formData, function(data) {		        
+                $.post('/ajax/add_member_activity', {member_id: member, activity_id: activity}, function(data) {
+                    location.hash = '#tab3';
+                    location.reload(); 
+                    //$("#tab3").load(location.href + " #tab3>*", "");  	
+                });         
+            });
+            //$("#tabs").tabs("option", "active", 2);
+        });
+
+        $('a.deleteActivity').on('click', function(e) {
+            e.preventDefault();
+            var element = e.target;
+            var id = $(element).data('id');
+            var formData = $('form#MemberForm').serialize();	        	       
+            $.post('/ajax/rememberMemberModel', formData, function(data) {		        	
+                $.get('/ajax/delete_member_activity/' + id, function(data) {
+                    console.log(JSON.parse(data));
+                    //$("#tab3").load(location.href + " #tab3>*", "");
+                    location.hash = '#tab3';
+                    location.reload(); 
+
+                });         
+            });
+
+        });
+    });
 </script>

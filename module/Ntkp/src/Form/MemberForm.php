@@ -93,6 +93,21 @@ class MemberForm extends Form
             'class' => 'control-label col-xs-2',
         ]);
         $this->add($email);
+        
+        // Kontakt osoba.
+        $this->add([
+            'name' => 'kontakt_osoba',
+            'attributes' => [
+                'type' => 'text',
+                'class' => 'form-control',
+            ],
+            'options' => [
+                'label' => 'Kontakt osoba',
+                'label_attributes' => [
+                    'class' => 'control-label col-xs-2',
+                ]
+            ]            
+        ]);
 
         
         // Member role types.
@@ -188,15 +203,18 @@ class MemberForm extends Form
             $options[$row->id] = $row->name;
         }
         
+        
         $this->add([
             'type' => Element\Select::class,
             'name' => 'member_status_id',
+            'required' => false,
             'options' => [
                 'label' => 'Status člana',
                 'value_options' => $options,
                 'label_attributes' => [
                     'class' => 'control-label col-xs-2',
-                ]
+                ],
+                
             ],
         ]);
         

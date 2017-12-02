@@ -1,0 +1,133 @@
+<?php
+    $title = "Registracija novog korisnika";
+    $this->headTitle($title);
+?>
+
+<h3 class='page-title'><?php echo $this->escapeHtml($title)?></h3>
+
+<?php 
+
+    $name = $form->get('name');
+    $name->setAttribute('class', 'form-control');
+    $name->setAttribute('placeholder', 'Ime vaše organizacije ...');
+    
+    $description = $form->get('description');
+    $description->setAttribute('class', 'form-control');
+    $description->setAttribute('placeholder', 'Opišite vašu organizaciju u nekoliko rečenica ...');
+    
+    $email = $form->get('email');
+    $email->setAttribute('class', 'form-control');
+    $email->setAttribute('placeholder', 'Email ...');
+    
+    $kontakt = $form->get('kontakt_osoba');
+    $kontakt->setAttribute('placeholder', 'Kontakt osoba ...');    
+    
+    $url = $form->get('url');
+    $url->setAttribute('class', 'form-control');
+    $url->setAttribute('placeholder', 'Web adresa ...');
+    
+    $member_type = $form->get('member_type_id');
+    $member_type->setAttribute('class', 'form-control');
+    
+    $member_role = $form->get('member_role_id');
+    $member_role->setAttribute('class', 'form-control');
+    
+    $property_type = $form->get('property_type_id');
+    $property_type->setAttribute('class', 'form-control');
+    
+    $request_domain = $form->get('request_domain_id');
+    $request_domain->setAttribute('class', 'form-control');
+    
+    $member_status = $form->get('member_status_id');
+    $member_status->setAttribute('class', 'form-control');
+    
+    $submit = $form->get('submit');
+    $submit->setAttribute('class', 'btn btn-primary');
+    
+    $form->setAttribute('action', $this->url('register'));    
+    $form->prepare();
+    
+    echo $this->form()->openTag($form);    
+    echo $this->formHidden($form->get('id'));
+?>
+
+<input type="hidden" name="member_status_id" value="1"/>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($name) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($name);?>
+        <?php echo $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($description) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($description);?>
+        <?php echo $this->formElementErrors()->render($description, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($kontakt) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($kontakt);?>
+        <?php echo $this->formElementErrors()->render($kontakt, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($email) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($email);?>
+        <?php echo $this->formElementErrors()->render($email, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($url) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($url);?>
+        <?php echo $this->formElementErrors()->render($url, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($member_type) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($member_type);?>
+        <?php echo $this->formElementErrors()->render($member_type, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($member_role) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($member_role);?>
+        <?php echo $this->formElementErrors()->render($member_role, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($property_type) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($property_type);?>
+        <?php echo $this->formElementErrors()->render($property_type, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<div class='form-group'>
+    <?php echo $this->formLabel($request_domain) ?>
+    <div class='col-xs-4'>
+        <?php echo $this->formElement($request_domain);?>
+        <?php echo $this->formElementErrors()->render($request_domain, ['class' => 'help-block']) ?>
+    </div>
+</div>
+
+<?php echo $this->formSubmit($submit) ?>
+<?php echo $this->form()->closeTag() ?>
+    
+
+<?php
+

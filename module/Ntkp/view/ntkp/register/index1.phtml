@@ -1,0 +1,235 @@
+<?php
+    $this->headScript()->appendFile('/js/activities.js');  
+    $title = "Registracija novog korisnika";
+    $this->headTitle($title);
+    $activities = $model->activities;
+?>
+
+<h3 class='page-title'><?php echo $this->escapeHtml($title)?></h3>
+
+<?php 
+
+    $name = $form->get('name');
+    $name->setAttribute('class', 'form-control');
+    $name->setAttribute('placeholder', 'Ime vaše organizacije ...');
+    
+    $description = $form->get('description');
+    $description->setAttribute('class', 'form-control');
+    $description->setAttribute('placeholder', 'Opišite vašu organizaciju u nekoliko rečenica ...');
+    
+    $email = $form->get('email');
+    $email->setAttribute('class', 'form-control');
+    $email->setAttribute('placeholder', 'Email ...');
+    
+    $kontakt = $form->get('kontakt_osoba');
+    $kontakt->setAttribute('placeholder', 'Kontakt osoba ...');    
+    
+    $url = $form->get('url');
+    $url->setAttribute('class', 'form-control');
+    $url->setAttribute('placeholder', 'Web adresa ...');
+    
+    $member_type = $form->get('member_type_id');
+    $member_type->setAttribute('class', 'form-control');
+    
+    $member_role = $form->get('member_role_id');
+    $member_role->setAttribute('class', 'form-control');
+    
+    $property_type = $form->get('property_type_id');
+    $property_type->setAttribute('class', 'form-control');
+    
+    $request_domain = $form->get('request_domain_id');
+    $request_domain->setAttribute('class', 'form-control');
+    
+    $member_status = $form->get('member_status_id');
+    $member_status->setAttribute('class', 'form-control');
+    
+    $submit = $form->get('submit');
+    $submit->setAttribute('class', 'btn btn-primary');
+    
+    $form->setAttribute('action', $this->url('register', ['action' => 'index1']));    
+    $form->prepare();
+    
+    echo $this->form()->openTag($form);    
+    echo $this->formHidden($form->get('id'));
+?>
+
+<input type="hidden" name="member_status_id" value="1"/>
+
+<div id="tabs">
+    <ul>
+        <li><a href="#tab1">Osnovni podaci</a></li>
+        <li><a href="#tab2">Aktivnosti</a></li>
+    </ul>
+    <div id="tab1">
+        <div class='form-group'>
+            <?php echo $this->formLabel($name) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($name);?>
+                <?php echo $this->formElementErrors()->render($name, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+
+        <div class='form-group'>
+            <?php echo $this->formLabel($description) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($description);?>
+                <?php echo $this->formElementErrors()->render($description, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+
+        <div class='form-group'>
+            <?php echo $this->formLabel($kontakt) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($kontakt);?>
+                <?php echo $this->formElementErrors()->render($kontakt, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+
+        <div class='form-group'>
+            <?php echo $this->formLabel($email) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($email);?>
+                <?php echo $this->formElementErrors()->render($email, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+
+        <div class='form-group'>
+            <?php echo $this->formLabel($url) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($url);?>
+                <?php echo $this->formElementErrors()->render($url, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+
+        <div class='form-group'>
+            <?php echo $this->formLabel($member_type) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($member_type);?>
+                <?php echo $this->formElementErrors()->render($member_type, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+
+        <div class='form-group'>
+            <?php echo $this->formLabel($member_role) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($member_role);?>
+                <?php echo $this->formElementErrors()->render($member_role, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+
+        <div class='form-group'>
+            <?php echo $this->formLabel($property_type) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($property_type);?>
+                <?php echo $this->formElementErrors()->render($property_type, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+
+        <div class='form-group'>
+            <?php echo $this->formLabel($request_domain) ?>
+            <div class='col-xs-4'>
+                <?php echo $this->formElement($request_domain);?>
+                <?php echo $this->formElementErrors()->render($request_domain, ['class' => 'help-block']) ?>
+            </div>
+        </div>
+    </div>
+    <div id="tab2">
+        <div class="lista-aktivnosti">
+         	<?php if(count($activities) == 0): ?>
+         		<h3>Nema definisanih aktivnosti</h3>
+         	<?php else: ?>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Odeljak</th>
+                                <th>Šifra</th>
+                                <th>Opis</th>
+                                <th>Akcija</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $counter = 0; ?>
+                            <?php foreach($activities as $activity):?>
+                            <tr>
+                                <td width="5%"><?php echo $activity->section ?></td>
+                                <td width="5%"><?php echo sprintf("%02d", $activity->class) ?></td>
+                                <td><?php echo $activity->description ?></td>
+                                <td><a class="deleteActivity" href="#" data-id="<?php echo $counter;?>" style="color: #1f8ecd">Obriši</a>
+                            </tr>
+                            <?php $counter ++; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+         	<?php endif; ?>
+         	<a href="#" id="addAction" class="btn btn-default">Dodaj novu aktivnost</a>
+     	</div>
+     	<div class="forma-dodaj-aktivnost">
+            <h3>Dodaj novu aktivnost</h3>     			
+            <div class="form-group">
+                <label class="col-xs-2 control-label" for="section_id">Sekcija</label>
+                <div class="col-xs-4">
+                        <select id="section_id" name="section_id" class="form-control"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-2 control-label" for="activity_id">Aktivnost</label>
+                <div class="col-xs-8">
+                        <select id = "activity_id" name="activity_id" class="form-control"></select>
+                </div>
+            </div>
+            <a href="#" id="submitActivity" class="btn btn-default">Potvrdi</a>
+            <a href="#" id="nazadNaListu" class="btn btn-default">Nazad na listu</a>     		
+     	</div>
+    </div>
+</div>
+
+<?php echo $this->formSubmit($submit) ?>
+<?php echo $this->form()->closeTag() ?>
+<script>
+    $(document).ready(function() {
+        $("#tabs").tabs(); 
+        $(".forma-dodaj-aktivnost").hide();
+        $("#addAction").click(function(evt) {
+            $(".lista-aktivnosti").hide();
+            $('.forma-dodaj-aktivnost').css('display', 'inline!important');
+            $(".forma-dodaj-aktivnost").show();
+        });
+
+        $("#nazadNaListu").click(function(evt) {
+            $(".lista-aktivnosti").show();
+            $(".forma-dodaj-aktivnost").hide();
+        });
+
+
+        $('#submitActivity').on('click', function(e) {			
+            e.preventDefault();	     
+            var activity = $("#activity_id option:selected").val();
+            var formData = $('form#MemberForm').serialize();	        	       
+            $.post('/ajax/rememberMemberModel', formData, function(data) {		        
+                $.post('/ajax/add_member_activity', { activity_id: activity }, function(data) {
+                    location.hash = '#tab2';
+                    location.reload(); 
+                    //$("#tab3").load(location.href + " #tab3>*", "");  	
+                });
+            });
+            //$("#tabs").tabs("option", "active", 2);
+        });
+
+        $('a.deleteActivity').on('click', function(e) {
+            e.preventDefault();
+            var element = e.target;
+            var id = $(element).data('id');
+            var formData = $('form#MemberForm').serialize();	        	       
+            $.post('/ajax/rememberMemberModel', formData, function(data) {		        	
+                $.get('/ajax/delete_member_activity/' + id, function(data) {
+                    console.log(JSON.parse(data));
+                    //$("#tab3").load(location.href + " #tab3>*", "");
+                    location.hash = '#tab3';
+                    location.reload(); 
+
+                });         
+            });
+
+        });
+    });
+</script>

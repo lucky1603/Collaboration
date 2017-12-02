@@ -100,7 +100,6 @@ class AjaxController extends AbstractActionController
         $session = new Container('models');
         $memberModel = $this->serviceManager->get(MemberModel::class);
         $memberModel->exchangeArray($session->memberModelData);
-        $member_id = $memberModel->member->id;
         
         $activity_id = $this->request->getPost('activity_id');
         $activityTable = $this->serviceManager->get(ActivityTable::class);

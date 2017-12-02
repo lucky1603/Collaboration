@@ -8,6 +8,7 @@ use Ntkp\Controller\IndexController;
 use Ntkp\Controller\LoginController;
 use Ntkp\Controller\MemberController;
 use Ntkp\Controller\UserController;
+use Ntkp\Controller\RegisterController;
 use Ntkp\Form\LoginForm;
 use Ntkp\Form\MemberForm;
 use Ntkp\Form\UserForm;
@@ -59,9 +60,9 @@ class Module implements ConfigProviderInterface {
                     $memberModel = new MemberModel($container);
                     return $memberModel;
                 },
-                ActivityTable::class => function($container) {
+                Model\ActivityTable::class => function($container) {
                     $tableGateway = $container->get(Model\ActivityTableGateway::class);
-                    return new ActivityTable($tableGateway);
+                    return new Model\ActivityTable($tableGateway);
                 },
                 /* Gateways */
                 Model\UserTableGateway::class => function($sm) {
@@ -122,6 +123,9 @@ class Module implements ConfigProviderInterface {
                 },
                 IndexController::class => function($container) {
                     return new IndexController($container);
+                }, 
+                RegisterController::class => function($container) {
+                    return new RegisterController($container);
                 }
             ],
         ];        
