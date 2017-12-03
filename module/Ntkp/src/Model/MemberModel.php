@@ -236,9 +236,11 @@ class MemberModel
     }
     
     public function save()
-    {
+    {        
         // Get members table.
         $memberTable = $this->serviceManager->get(MemberTable::class);
+        $memberActivityGateway = new TableGateway('member_activity', $this->dbAdapter);
+        
         // is it update or insert
         if(isset($this->member->id) && (int)$this->member->id != 0)
         {
@@ -278,9 +280,7 @@ class MemberModel
                         $userMemberGateway->insert(['user_id' => $id, 'member_id' => $this->member->id]);
                     }
                 }
-            }
-            
-            $memberActivityGateway = new TableGateway('member_activity', $this->dbAdapter);
+            }            
             
             // First delete what is to be deleted.
             if(isset($this->deletedActivities) && count($this->deletedActivities) > 0)
@@ -316,6 +316,7 @@ class MemberModel
         } else {
             // insert
             $member_id = $memberTable->saveMember($this->member);
+
             $retUsers = array();
             if(isset($this->users) && count($this->users) > 0)
             {
@@ -342,10 +343,10 @@ class MemberModel
                 foreach($this->addedActivities as $activity)
                 {
                     $data = [
-                        'member_id' => $this->member->id,
+                        'member_id' => $member_id,
                         'activity_id' => $activity->id,
-                    ];
-                    
+                    ];               
+                   
                     $memberActivityGateway->insert($data);
                 }
             }

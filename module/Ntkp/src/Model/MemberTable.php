@@ -54,8 +54,17 @@ class MemberTable
         if($id == 0)
         {
             $this->tableGateway->insert($data);
-            $rows = $this->tableGateway->getAdapter()->query('SELECT max(id) FROM public.member')->execute();
-            return $rows->current()["max"];
+            
+            $sql = new \Zend\Db\Sql\Sql($this->tableGateway->getAdapter());
+            $select = $sql->select();
+         
+            $select->from('member')
+                   ->order('id DESC')
+                   ->limit(1);
+            $statement = $sql->prepareStatementForSqlObject($select);
+            $rows = $statement->execute();
+
+            return $rows->current()["id"];
         } 
         
         if(! $this->getMember($id)) {

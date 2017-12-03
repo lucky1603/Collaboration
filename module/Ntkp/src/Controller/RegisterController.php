@@ -71,14 +71,15 @@ class RegisterController extends AbstractActionController {
         }
         
         $form = $this->serviceManager->get(\Ntkp\Form\MemberForm::class);
+        $member = $memberModel->member;
+        $form->bind($member);
+        
         $request = $this->getRequest();
         if(! $request->isPost())
         {
             return ['form' => $form, 'model' => $memberModel];
         }
-        
-        $member = $memberModel->member;
-        $form->bind($member);
+                
         $form->setData($request->getPost());
         if(! $form->isValid())
         {
