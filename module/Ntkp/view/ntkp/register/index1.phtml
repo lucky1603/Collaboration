@@ -205,11 +205,11 @@
             e.preventDefault();	     
             var activity = $("#activity_id option:selected").val();
             var formData = $('form').serialize();	
-            console.log(formData);
+            // console.log(formData);
             $.post('/ajax/rememberMemberModel', formData, function(data) {	
-                console.log(data);
+               //console.log(data);
                 $.post('/ajax/add_member_activity', { activity_id: activity }, function(data) {
-                    console.log(data);
+                    //console.log(data);
                     location.hash = '#tab2';
                     location.reload(); 
                     	

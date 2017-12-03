@@ -43,7 +43,6 @@ class MemberTable
             'member_role_id' => $member->member_role_id,
             'property_type_id' => $member->property_type_id,
             'request_domain_id' => $member->request_domain_id,
-            'activities' => $member->activities,
             'email' => $member->email,
             'url' => $member->url,
             'member_status_id' => $member->member_status_id,

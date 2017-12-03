@@ -24,6 +24,7 @@ return [
     'Zend\Mvc\I18n',
     'Zend\Mvc\Console',
     'Zend\Log',
+    'Zend\Mail',
     'Zend\Form',
     'Zend\Db',
     'Zend\Cache',

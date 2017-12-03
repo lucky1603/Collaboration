@@ -16,7 +16,6 @@ class Member
     public $member_role_id;
     public $property_type_id;
     public $request_domain_id;
-    public $activities;
     public $email;
     public $url;
     public $member_status_id;
@@ -31,7 +30,6 @@ class Member
         $this->member_role_id = isset($data['member_role_id']) ? $data['member_role_id'] : null;
         $this->property_type_id = isset($data['property_type_id']) ? $data['property_type_id'] : null;
         $this->request_domain_id = isset($data['request_domain_id']) ? $data['request_domain_id'] : null;
-        $this->activities = isset($data['activities']) ? $data['activities'] : null;
         $this->email = isset($data['email']) ? $data['email'] : null;
         $this->url = isset($data['url']) ? $data['url'] : null;
         $this->member_status_id = isset($data['member_status_id']) ? $data['member_status_id'] : null;
@@ -48,7 +46,6 @@ class Member
             'member_role_id' => $this->member_role_id,
             'property_type_id' => $this->property_type_id,
             'request_domain_id' => $this->request_domain_id,
-            'activities' => $this->activities,
             'email' => $this->email,
             'url' => $this->url,
             'member_status_id' => $this->member_status_id,

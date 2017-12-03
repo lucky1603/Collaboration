@@ -316,7 +316,6 @@ class MemberModel
         } else {
             // insert
             $member_id = $memberTable->saveMember($this->member);
-
             $retUsers = array();
             if(isset($this->users) && count($this->users) > 0)
             {
@@ -339,7 +338,6 @@ class MemberModel
             // Update or add the existing ones.
             if(isset($this->addedActivities) && count($this->addedActivities) > 0)
             {
-                
                 foreach($this->addedActivities as $activity)
                 {
                     $data = [

@@ -14,6 +14,9 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\ServiceManager\ServiceManager;
 
+use Zend\Mail\Transport\Smtp as SmtpTransport;
+use Zend\Mail\Transport\SmtpOptions;
+
 
 /**
  * Description of RegisterController
@@ -88,11 +91,41 @@ class RegisterController extends AbstractActionController {
         }
 
         
-        $memberModel->save();
+        $memberModel->save();      
+
+        $this->sendMail($memberModel->member->email, $memberModel->member->name);
         
         $viewModel = new ViewModel();
         $viewModel->setTemplate('/ntkp/register/confirm');
         return $viewModel;
+    }
+    
+    private function sendMail($email, $name)
+    {
+        $message = new \Zend\Mail\Message();
+        $message->setBody('Upravo ste se registrovali na NTKP portalu. Vaša molba će biti razmotrena u najskorije vreme i dobićete potvrdni email.\n Hvala i srdačan pozdrav,\n NTKP tim.');
+        $message->setFrom('sinisa.ristic@prosmart.rs', 'Sinisa Ristic');
+        $message->addTo($email, $name);
+        $message->setSubject("NTKP - Potvrda registracije");
+        
+        // Setup SMTP transport using LOGIN authentication
+        $transport = new SmtpTransport();
+        $options   = new SmtpOptions([
+            'name'              => 'example.com',
+            'host'              => 'smtp.gmail.com',
+            'port'              => 587,
+            // Notice port change for TLS is 587
+            'connection_class'  => 'plain',
+            'connection_config' => [
+                'username' => 'sinisa.ristic@gmail.com',
+                'password' => 'SinisaBarbara1602',
+                'ssl'      => 'tls',
+            ],
+        ]);
+        $transport->setOptions($options);
+        
+        //$transport = new \Zend\Mail\Transport\Sendmail();
+        $transport->send($message);        
     }
     
 }
