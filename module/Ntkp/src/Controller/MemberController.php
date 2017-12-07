@@ -63,7 +63,7 @@ class MemberController extends AbstractActionController
     public function addAction()
     {
         $form = $this->serviceManager->get(MemberForm::class);
-        $form->get('submit')->setValue('Dodaj člana');
+        $form->get('submit')->setValue('Dodaj Ä�lana');
         
         $request = $this->getRequest();
         if(! $request->isPost())
@@ -87,19 +87,15 @@ class MemberController extends AbstractActionController
     
     public function addWithModelAction()
     {
-        $form = $this->serviceManager->get(MemberForm::class);
-        //$form->get('submit')->setValue('Dodaj člana');
-        $session = new Container('models');
         $memberModel = $this->serviceManager->get(MemberModel::class);
-
+        $session = new Container('models');
         if(isset($session->memberModelData))
         {
-            $memberModel->exchangeArray($session->memberModelData);
-            $form->bind($memberModel->member);
-        } else {
-            $session->memberModelData = $memberModel->getArrayCopy();
-        }
-                    
+            $memberModel->exchangeArray($session->memberModelData);          
+        } 
+        
+        $form = $this->serviceManager->get(MemberForm::class);
+        $form->bind($memberModel->member);
         
         $request = $this->getRequest();
         if(! $request->isPost())
@@ -110,12 +106,12 @@ class MemberController extends AbstractActionController
         $form->setData($request->getPost());
         if(! $form->isValid())
         {
-            return ['form' => $form, 'model' => $memberModel];
+            return ['form' => $form, 'model' => $model];
         }
-                
-        $retVal = $memberModel->save();
-
-        return $this->redirect()->toRoute('member', ['action' => 'index']);
+        
+        $memberModel->save();
+                    
+        return $this->redirect()->toRoute('member');
     }
             
     /**

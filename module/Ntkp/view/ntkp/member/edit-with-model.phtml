@@ -255,13 +255,12 @@
 
 
         $('#submitActivity').on('click', function(e) {			
-            e.preventDefault();	     
-            var member = <?php echo json_encode($id) ?>;
+            e.preventDefault();	                 
             var activity = $("#activity_id option:selected").val();
 
             var formData = $('form#MemberForm').serialize();	        	       
             $.post('/ajax/rememberMemberModel', formData, function(data) {		        
-                $.post('/ajax/add_member_activity', {member_id: member, activity_id: activity}, function(data) {
+                $.post('/ajax/add_member_activity', {activity_id: activity}, function(data) {
                     location.hash = '#tab3';
                     location.reload(); 
                     //$("#tab3").load(location.href + " #tab3>*", "");  	

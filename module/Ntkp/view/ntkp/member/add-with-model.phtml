@@ -1,6 +1,8 @@
 <?php
+    $this->headScript()->appendFile('/js/activities.js');  
     $member = $model->member;
     $users = $model->users;
+    $activities = $model->activities;
     $roles = $model->getUserRoles();
     $statuses = $model->getUserStatuses();
     $title = "Dodaj novog clana";
@@ -57,6 +59,7 @@
     <ul>
         <li><a href="#tab1">Osnovni podaci</a></li>
         <li><a href="#tab2">Priključeni korisnici</a></li>
+        <li><a href="#tab3">Aktivnosti</a></li>
     </ul>
     <div id="tab1">         
          <div class='form-group'>
@@ -169,7 +172,54 @@
             </table>     		
      	<?php endif;?>
      	<a id="new" href="<?php echo $this->url('user', ['action' => 'addUserMember']) ?>" class="btn btn-primary">Dodaj korisnika</a>
-     </div>     
+     </div>    
+     <div id="tab3">
+        <div class="lista-aktivnosti">
+         	<?php if(count($activities) == 0): ?>
+         		<h3>Nema definisanih aktivnosti</h3>
+         	<?php else: ?>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Odeljak</th>
+                                <th>Šifra</th>
+                                <th>Opis</th>
+                                <th>Akcija</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $counter = 0; ?>
+                            <?php foreach($activities as $activity):?>
+                            <tr>
+                                <td width="5%"><?php echo $activity->section ?></td>
+                                <td width="5%"><?php echo sprintf("%02d", $activity->class) ?></td>
+                                <td><?php echo $activity->description ?></td>
+                                <td><a class="deleteActivity" href="#" data-id="<?php echo $counter;?>" style="color: #1f8ecd">Obriši</a>
+                            </tr>
+                            <?php $counter ++; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+         	<?php endif; ?>
+         	<a href="#" id="addAction" class="btn btn-default">Dodaj novu aktivnost</a>
+     	</div>
+         <div class="forma-dodaj-aktivnost">
+            <h3>Dodaj novu aktivnost</h3>     			
+            <div class="form-group">
+                <label class="col-xs-2 control-label" for="section_id">Sekcija</label>
+                <div class="col-xs-4">
+                        <select id="section_id" name="section_id" class="form-control"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-2 control-label" for="activity_id">Aktivnost</label>
+                <div class="col-xs-8">
+                        <select id = "activity_id" name="activity_id" class="form-control"></select>
+                </div>
+            </div>
+            <a href="#" id="submitActivity" class="btn btn-default">Potvrdi</a>
+            <a href="#" id="nazadNaListu" class="btn btn-default">Nazad na listu</a>     		
+     	</div>
  </div>
  
  <div class="jumbotron">
@@ -183,12 +233,58 @@
     $(document).ready(function() {
         $("#tabs").tabs();
         $('a#new').on('click', function(e) {
-        e.preventDefault();
-        var formData = $('form').serialize();
-        $.post('/ajax/rememberMemberModel', formData, function(data) {
-            console.log(data);
-        });        
-        window.location.href='/user/addUserMember';
+            e.preventDefault();
+            var formData = $('form').serialize();
+            $.post('/ajax/rememberMemberModel', formData, function(data) {
+                console.log(data);
+            });        
+            window.location.href='/user/addUserMember';
+        });
+        
+        $(".forma-dodaj-aktivnost").hide();
+        $("#addAction").click(function(evt) {
+            $(".lista-aktivnosti").hide();
+            $('.forma-dodaj-aktivnost').css('display', 'inline!important');
+            $(".forma-dodaj-aktivnost").show();
+        });
+
+        $("#nazadNaListu").click(function(evt) {
+            $(".lista-aktivnosti").show();
+            $(".forma-dodaj-aktivnost").hide();
+        });
+
+
+        $('#submitActivity').on('click', function(e) {			
+            e.preventDefault();	     
+            
+            var activity = $("#activity_id option:selected").val();
+
+            var formData = $('form#MemberForm').serialize();	        	       
+            $.post('/ajax/rememberMemberModel', formData, function(data) {		        
+                $.post('/ajax/add_member_activity', {activity_id: activity}, function(data) {
+                    location.hash = '#tab3';
+                    location.reload(); 
+                    //$("#tab3").load(location.href + " #tab3>*", "");  	
+                });         
+            });
+            //$("#tabs").tabs("option", "active", 2);
+        });
+
+        $('a.deleteActivity').on('click', function(e) {
+            e.preventDefault();
+            var element = e.target;
+            var id = $(element).data('id');
+            var formData = $('form#MemberForm').serialize();	        	       
+            $.post('/ajax/rememberMemberModel', formData, function(data) {		        	
+                $.get('/ajax/delete_member_activity/' + id, function(data) {
+                    console.log(JSON.parse(data));
+                    //$("#tab3").load(location.href + " #tab3>*", "");
+                    location.hash = '#tab3';
+                    location.reload(); 
+
+                });         
+            });
+
         });
     });
 </script>

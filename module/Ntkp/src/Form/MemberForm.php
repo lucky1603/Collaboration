@@ -123,7 +123,7 @@ class MemberForm extends Form
             'type' => Element\Select::class,
             'name' => 'member_role_id',
             'options' => [
-                'label' => 'Uloga',
+                'label' => 'Svojstvo člana',
                 'value_options' => $options,
                 'label_attributes' => [
                     'class' => 'control-label col-xs-2',
@@ -144,7 +144,7 @@ class MemberForm extends Form
             'type' => Element\Select::class,
             'name' => 'property_type_id',
             'options' => [
-                'label' => 'Tip svojine',
+                'label' => 'Svojina',
                 'value_options' => $options,
                 'label_attributes' => [
                     'class' => 'control-label col-xs-2',
@@ -165,7 +165,7 @@ class MemberForm extends Form
             'type' => Element\Select::class,
             'name' => 'member_type_id',
             'options' => [
-                'label' => 'Vrsta članstva',
+                'label' => 'Tip organizacije',
                 'value_options' => $options,
                 'label_attributes' => [
                     'class' => 'control-label col-xs-2',
@@ -186,7 +186,7 @@ class MemberForm extends Form
             'type' => Element\Select::class,
             'name' => 'request_domain_id',
             'options' => [
-                'label' => 'Teritorijalno',
+                'label' => 'Saradnja',
                 'value_options' => $options,
                 'label_attributes' => [
                     'class' => 'control-label col-xs-2',
